@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✨ Vocab 570 - Học Từ Vựng</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Quicksand',sans-serif;background:linear-gradient(135deg,#fff0f5 0%,#fffbec 50%,#fff5f9 100%);min-height:100vh;color:#4a3040}
+:root{--pink:#ff8fab;--pink-light:#ffd6e7;--pink-deep:#e8547a;--yellow:#f9c74f;--yellow-light:#fff3cd;--yellow-deep:#d4a017;--green:#4caf82;--orange:#f4845f;--text:#4a3040;--text2:#8a6070;--border:#fcd5e5;--radius:14px;--shadow:0 2px 12px rgba(255,143,171,0.15)}
+h1,h2,h3{font-weight:700}
+.app{max-width:1100px;margin:0 auto;padding:1.5rem 1rem}
+.header{text-align:center;padding:2rem 1rem 1.2rem}
+.header h1{font-size:2.2rem;background:linear-gradient(135deg,var(--pink-deep),var(--yellow-deep));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.3rem}
+.header p{color:var(--text2);font-size:.95rem}
+.stats-bar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:.8rem 0}
+.stat-pill{background:white;border:1.5px solid var(--border);border-radius:50px;padding:.4rem 1rem;font-size:.85rem;font-weight:600;color:var(--text2);display:flex;align-items:center;gap:6px}
+.stat-pill span{color:var(--pink-deep)}
+.tabs{display:flex;gap:5px;background:rgba(255,255,255,0.7);border-radius:50px;padding:5px;border:1.5px solid var(--border);margin-bottom:1.5rem;flex-wrap:wrap;justify-content:center}
+.tab{padding:.5rem 1rem;border-radius:50px;border:none;background:transparent;cursor:pointer;font-family:'Quicksand',sans-serif;font-weight:600;font-size:.85rem;color:var(--text2);transition:.2s;white-space:nowrap}
+.tab:hover{background:var(--pink-light);color:var(--pink-deep)}
+.tab.active{background:linear-gradient(135deg,var(--pink),var(--yellow));color:white;box-shadow:0 2px 8px rgba(255,143,171,0.4)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.2rem}
+.search-wrap{flex:1;min-width:200px;position:relative}
+.search-wrap input{width:100%;padding:.7rem 1rem .7rem 2.5rem;border-radius:50px;border:1.5px solid var(--border);background:white;font-family:'Quicksand',sans-serif;font-size:.95rem;outline:none;transition:.2s}
+.search-wrap input:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,143,171,0.15)}
+.search-icon{position:absolute;left:.8rem;top:50%;transform:translateY(-50%);font-size:1.1rem;color:var(--text2)}
+select{padding:.7rem 1rem;border-radius:50px;border:1.5px solid var(--border);background:white;font-family:'Quicksand',sans-serif;font-size:.9rem;color:var(--text);outline:none;cursor:pointer}
+
+/* VOCAB CARD */
+.vocab-grid{display:grid;gap:10px}
+.vocab-card{background:white;border-radius:var(--radius);border:1.5px solid var(--border);padding:1rem 1.2rem;transition:.2s}
+.vocab-card:hover{border-color:var(--pink);box-shadow:var(--shadow);transform:translateY(-1px)}
+.vocab-card.known{border-color:#c8f0dc;background:#f5fff9}
+.vocab-card.known .word-en{color:var(--green)}
+.vocab-card-header{display:flex;align-items:center;gap:10px;cursor:pointer}
+.word-num{min-width:32px;height:32px;border-radius:50%;background:var(--pink-light);color:var(--pink-deep);font-weight:700;font-size:.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.word-main{flex:1}
+.word-en{font-size:1.05rem;font-weight:700;color:var(--pink-deep);display:flex;align-items:center;gap:8px}
+.word-vi{font-size:.92rem;color:var(--text);margin-top:.1rem}
+.speak-btn{background:none;border:none;cursor:pointer;font-size:1.1rem;padding:2px 4px;border-radius:8px;transition:.15s;flex-shrink:0;line-height:1}
+.speak-btn:hover{background:var(--pink-light);transform:scale(1.15)}
+.speak-btn.speaking{animation:pulse .6s infinite alternate}
+@keyframes pulse{from{opacity:.5}to{opacity:1}}
+.group-badge{background:var(--pink-light);color:var(--pink-deep);border-radius:20px;padding:.15rem .6rem;font-size:.72rem;font-weight:700;white-space:nowrap;flex-shrink:0}
+.known-btn{background:none;border:1.5px solid var(--border);border-radius:50px;padding:.28rem .75rem;font-size:.72rem;font-weight:700;cursor:pointer;font-family:'Quicksand',sans-serif;color:var(--text2);transition:.2s;flex-shrink:0}
+.known-btn:hover{border-color:var(--green);color:var(--green)}
+.known-btn.active{background:#e8faf2;border-color:var(--green);color:var(--green)}
+.expand-btn{background:none;border:none;cursor:pointer;font-size:.9rem;color:var(--text2);padding:2px;transition:.2s;flex-shrink:0}
+
+/* EXPANDED DETAIL */
+.vocab-detail{display:none;margin-top:.8rem;padding-top:.8rem;border-top:1px dashed var(--border)}
+.vocab-detail.open{display:block}
+.family-section{margin-top:.5rem}
+.family-label{font-size:.75rem;font-weight:700;color:var(--text2);margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.5px}
+.family-words{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:7px}
+.family-tag{display:inline-flex;align-items:center;gap:6px;background:var(--yellow-light);color:var(--yellow-deep);border-radius:12px;padding:.35rem .75rem;font-size:.8rem;font-weight:600;border:1px solid #f9d87a;cursor:default;transition:.15s;flex-direction:column;align-items:flex-start;min-width:100px}
+.family-tag-row{display:flex;align-items:center;gap:5px}
+.family-tag-word{font-weight:700;color:var(--yellow-deep);font-size:.82rem}
+.family-tag-meaning{font-size:.73rem;color:var(--text2);font-weight:500;margin-top:.1rem;font-style:italic;min-height:.9rem}
+.family-tag .speak-mini{font-size:.82rem;opacity:.8;cursor:pointer;background:none;border:none;padding:0;line-height:1}
+
+/* FLASHCARD */
+.flashcard-wrap{display:flex;flex-direction:column;align-items:center;gap:1.5rem}
+.fc-controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;width:100%}
+.fc-progress{width:100%;max-width:600px;background:#ffe0ec;border-radius:50px;height:8px;overflow:hidden}
+.fc-bar{height:100%;background:linear-gradient(90deg,var(--pink),var(--yellow));border-radius:50px;transition:.4s}
+.fc-counter{font-size:.85rem;color:var(--text2);font-weight:600}
+.flashcard{width:100%;max-width:600px;min-height:300px;perspective:1000px;cursor:pointer}
+.fc-inner{width:100%;min-height:300px;position:relative;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,.2,.2,1)}
+.fc-inner.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;width:100%;min-height:300px;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.fc-front{background:linear-gradient(135deg,#fff0f5,#fffbec);border:2px solid var(--border)}
+.fc-back{background:linear-gradient(135deg,#f0fff6,#fff0f5);border:2px solid #c8f0dc;transform:rotateY(180deg)}
+.fc-hint{font-size:.78rem;color:var(--text2);margin-bottom:.5rem;font-weight:600}
+.fc-word{font-size:2rem;font-weight:700;color:var(--pink-deep);margin-bottom:.4rem;display:flex;align-items:center;gap:10px}
+.fc-speak{background:var(--pink-light);border:none;border-radius:50%;width:36px;height:36px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s}
+.fc-speak:hover{transform:scale(1.12);background:var(--pink)}
+.fc-group{font-size:.8rem;background:var(--pink-light);color:var(--pink-deep);border-radius:20px;padding:.2rem .8rem;font-weight:700}
+.fc-meaning{font-size:1.35rem;font-weight:700;color:var(--green);margin-bottom:.5rem}
+.fc-family-list{font-size:.82rem;color:var(--text2);line-height:1.9;max-width:400px}
+.fc-nav{display:flex;gap:10px;justify-content:center}
+.btn{padding:.6rem 1.4rem;border-radius:50px;border:none;font-family:'Quicksand',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;transition:.2s}
+.btn-pink{background:linear-gradient(135deg,var(--pink),#ff6b9d);color:white;box-shadow:0 2px 8px rgba(255,143,171,0.35)}
+.btn-pink:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(255,143,171,0.45)}
+.btn-outline{background:white;border:1.5px solid var(--border);color:var(--text2)}
+.btn-outline:hover{border-color:var(--pink);color:var(--pink-deep)}
+.btn-green{background:linear-gradient(135deg,#4caf82,#2d9e6b);color:white}
+.btn-yellow{background:linear-gradient(135deg,var(--yellow),#f4a324);color:white}
+.btn-red{background:linear-gradient(135deg,#ff6b6b,#e74c3c);color:white}
+.btn-blue{background:linear-gradient(135deg,#6bb5d6,#4a9dbf);color:white}
+.btn-sm{padding:.38rem .9rem;font-size:.8rem}
+
+/* QUIZ */
+.quiz-wrap{max-width:700px;margin:0 auto}
+.quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;gap:10px}
+.quiz-score-pill{background:var(--pink-light);color:var(--pink-deep);border-radius:50px;padding:.4rem 1rem;font-weight:700;font-size:.88rem;white-space:nowrap}
+.quiz-q{background:white;border-radius:20px;border:2px solid var(--border);padding:1.5rem;margin-bottom:1rem;text-align:center}
+.quiz-q .qlabel{font-size:.78rem;color:var(--text2);margin-bottom:.5rem;font-weight:600}
+.quiz-q .question{font-size:1.45rem;font-weight:700;color:var(--pink-deep)}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem}
+.quiz-opt{background:white;border:1.5px solid var(--border);border-radius:var(--radius);padding:.9rem;font-family:'Quicksand',sans-serif;font-size:.92rem;font-weight:600;cursor:pointer;text-align:left;color:var(--text);transition:.2s}
+.quiz-opt:hover:not(:disabled){border-color:var(--pink);background:var(--pink-light)}
+.quiz-opt.correct{border-color:var(--green);background:#e8faf2;color:#1a7a4a}
+.quiz-opt.wrong{border-color:#e74c3c;background:#fef0ef;color:#c0392b}
+.quiz-opt:disabled{cursor:default}
+.quiz-feedback{text-align:center;font-weight:700;font-size:1rem;margin:.5rem 0;min-height:1.4rem}
+.quiz-feedback.correct{color:var(--green)}
+.quiz-feedback.wrong{color:#e74c3c}
+.quiz-finish{text-align:center;padding:2rem;background:white;border-radius:20px;border:2px solid var(--border)}
+.quiz-big{font-size:3rem;font-weight:700;background:linear-gradient(135deg,var(--pink-deep),var(--yellow-deep));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.quiz-mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:1rem 0}
+.mode-card{background:white;border:1.5px solid var(--border);border-radius:var(--radius);padding:1.2rem;cursor:pointer;text-align:center;transition:.2s}
+.mode-card:hover{border-color:var(--pink);box-shadow:var(--shadow);transform:translateY(-2px)}
+.mode-card .icon{font-size:2rem;margin-bottom:.4rem}
+.mode-card .title{font-weight:700;color:var(--pink-deep);margin-bottom:.2rem}
+.mode-card .desc{font-size:.8rem;color:var(--text2)}
+
+/* DICTATION GAME */
+.dictation-wrap{max-width:650px;margin:0 auto}
+.dict-word-display{background:white;border-radius:20px;border:2px solid var(--border);padding:2rem;text-align:center;margin-bottom:1rem}
+.dict-hint{font-size:.8rem;color:var(--text2);margin-bottom:.5rem;font-weight:600}
+.dict-blanks{font-size:1.8rem;font-weight:700;color:var(--pink-deep);letter-spacing:6px;font-family:monospace;margin-bottom:.5rem;word-break:break-all}
+.dict-meaning{font-size:1rem;color:var(--text);margin-bottom:.3rem}
+.dict-group{font-size:.8rem;background:var(--pink-light);color:var(--pink-deep);border-radius:20px;padding:.2rem .8rem;font-weight:700;display:inline-block}
+.dict-input-row{display:flex;gap:10px;margin-bottom:1rem}
+.dict-input{flex:1;padding:.8rem 1.2rem;border-radius:50px;border:2px solid var(--border);font-family:'Quicksand',sans-serif;font-size:1.1rem;font-weight:700;outline:none;text-align:center;letter-spacing:2px}
+.dict-input:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,143,171,0.15)}
+.dict-input.correct-input{border-color:var(--green);background:#e8faf2}
+.dict-input.wrong-input{border-color:#e74c3c;background:#fef0ef;animation:shake .3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.dict-feedback{text-align:center;min-height:1.4rem;font-weight:700;font-size:.95rem;margin-bottom:.5rem}
+.dict-feedback.ok{color:var(--green)}
+.dict-feedback.bad{color:#e74c3c}
+.dict-score-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.hint-letters{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:.5rem}
+.hint-letter{background:var(--pink-light);color:var(--pink-deep);border-radius:8px;padding:.2rem .5rem;font-size:.85rem;font-weight:700;font-family:monospace}
+
+/* MATCH GAME */
+.match-wrap{max-width:800px;margin:0 auto}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0}
+.match-col{display:flex;flex-direction:column;gap:8px}
+.match-card{background:white;border:1.5px solid var(--border);border-radius:var(--radius);padding:.8rem 1rem;cursor:pointer;font-weight:600;font-size:.9rem;transition:.2s;user-select:none;text-align:center}
+.match-card:hover:not(.matched):not(.selected){border-color:var(--pink);background:var(--pink-light)}
+.match-card.selected{border-color:var(--pink-deep);background:var(--pink-light);transform:scale(1.02)}
+.match-card.matched{border-color:var(--green);background:#e8faf2;color:#1a7a4a;cursor:default;opacity:.7}
+.match-card.wrong-flash{border-color:#e74c3c;background:#fef0ef;animation:flash .4s}
+@keyframes flash{0%,100%{background:white}50%{background:#fef0ef}}
+.match-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.match-timer{font-size:1.1rem;font-weight:700;color:var(--pink-deep)}
+.match-score{background:var(--pink-light);color:var(--pink-deep);border-radius:50px;padding:.35rem .9rem;font-weight:700;font-size:.88rem}
+
+/* SCOREBOARD */
+.score-wrap{max-width:700px;margin:0 auto}
+.score-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem}
+.score-card{background:white;border-radius:var(--radius);border:1.5px solid var(--border);padding:1.1rem;text-align:center}
+.score-card .num{font-size:1.9rem;font-weight:700;color:var(--pink-deep)}
+.score-card .lbl{font-size:.78rem;color:var(--text2);font-weight:600;margin-top:.2rem}
+.score-card.green .num{color:var(--green)}
+.score-card.yellow .num{color:var(--yellow-deep)}
+.progress-ring-wrap{display:flex;flex-direction:column;align-items:center;margin:1rem 0 1.5rem}
+.progress-label{font-size:.85rem;color:var(--text2);font-weight:600;margin-top:.5rem}
+.score-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px}
+.score-group-card{background:white;border-radius:var(--radius);border:1.5px solid var(--border);padding:1rem;display:flex;flex-direction:column;gap:.4rem}
+.sg-name{font-weight:700;font-size:.88rem;color:var(--text)}
+.sg-bar-wrap{background:#f5e8ef;border-radius:50px;height:7px;overflow:hidden}
+.sg-bar{height:100%;border-radius:50px;background:linear-gradient(90deg,var(--pink),var(--yellow));transition:.6s}
+.sg-info{font-size:.78rem;color:var(--text2);font-weight:600}
+.history-list{margin-top:1rem}
+.history-item{display:flex;justify-content:space-between;align-items:center;padding:.55rem 1rem;border-radius:10px;margin-bottom:6px;background:white;border:1.5px solid var(--border);font-size:.83rem}
+.history-item .ts{color:var(--text2);font-size:.72rem}
+.empty{text-align:center;padding:3rem;color:var(--text2)}
+.empty .eicon{font-size:3rem;margin-bottom:.5rem}
+
+/* ADD VOCAB */
+.addvocab-wrap{max-width:750px;margin:0 auto}
+.add-tabs{display:flex;gap:8px;margin-bottom:1.2rem;flex-wrap:wrap}
+.add-tab{padding:.5rem 1.2rem;border-radius:50px;border:1.5px solid var(--border);background:white;cursor:pointer;font-family:'Quicksand',sans-serif;font-weight:600;font-size:.88rem;color:var(--text2);transition:.2s}
+.add-tab.active{background:var(--pink-deep);color:white;border-color:var(--pink-deep)}
+.form-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:.8rem}
+.form-group{display:flex;flex-direction:column;gap:.3rem;flex:1;min-width:160px}
+.form-group label{font-size:.8rem;font-weight:700;color:var(--text2)}
+.form-input{padding:.7rem 1rem;border-radius:var(--radius);border:1.5px solid var(--border);font-family:'Quicksand',sans-serif;font-size:.92rem;outline:none;transition:.2s;background:white}
+.form-input:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,143,171,0.12)}
+.custom-list{margin-top:1rem;display:grid;gap:8px}
+.custom-item{background:white;border:1.5px solid var(--border);border-radius:var(--radius);padding:.7rem 1rem;display:flex;align-items:center;gap:10px;font-size:.88rem}
+.custom-item .ci-word{font-weight:700;color:var(--pink-deep);min-width:120px}
+.custom-item .ci-vi{flex:1;color:var(--text)}
+.custom-item .del-btn{background:none;border:none;cursor:pointer;font-size:1rem;color:#e74c3c;opacity:.6;padding:2px;transition:.15s}
+.custom-item .del-btn:hover{opacity:1;transform:scale(1.1)}
+.upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:2rem;text-align:center;cursor:pointer;transition:.2s;background:white}
+.upload-zone:hover{border-color:var(--pink);background:var(--pink-light)}
+.upload-zone .uz-icon{font-size:2.5rem;margin-bottom:.5rem}
+.upload-zone .uz-text{font-weight:600;color:var(--text2)}
+.upload-zone .uz-sub{font-size:.8rem;color:var(--text2);margin-top:.2rem}
+.preview-table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:1rem}
+.preview-table th{background:var(--pink-light);color:var(--pink-deep);padding:.5rem .8rem;font-weight:700;text-align:left;border-radius:0}
+.preview-table td{padding:.45rem .8rem;border-bottom:1px solid var(--border)}
+.preview-table tr:last-child td{border-bottom:none}
+.preview-table tr:hover td{background:#fffbf5}
+
+/* PAGINATION */
+.pagination{display:flex;gap:6px;justify-content:center;margin-top:1rem;flex-wrap:wrap}
+.page-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border);background:white;font-family:'Quicksand',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;color:var(--text2);transition:.2s;display:flex;align-items:center;justify-content:center}
+.page-btn:hover{border-color:var(--pink);color:var(--pink-deep)}
+.page-btn.active{background:linear-gradient(135deg,var(--pink),var(--yellow));color:white;border-color:transparent}
+.page-info{font-size:.82rem;color:var(--text2);font-weight:600;padding:.4rem .6rem;display:flex;align-items:center}
+.toast{position:fixed;bottom:2rem;right:2rem;background:white;border:1.5px solid var(--border);border-radius:50px;padding:.7rem 1.3rem;font-family:'Quicksand',sans-serif;font-weight:700;font-size:.88rem;box-shadow:0 4px 20px rgba(255,143,171,0.3);transform:translateY(100px);opacity:0;transition:.35s;z-index:999;color:var(--text)}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{border-color:var(--green);color:var(--green)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(74,48,64,0.35);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem}
+.modal-box{background:white;border-radius:20px;padding:1.5rem;max-width:480px;width:100%;max-height:80vh;overflow-y:auto;position:relative}
+.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--text2)}
+.modal-word{font-size:1.8rem;font-weight:700;color:var(--pink-deep);margin-bottom:.3rem;display:flex;align-items:center;gap:10px}
+.modal-vi{font-size:1rem;color:var(--text);margin-bottom:.8rem}
+.modal-group{font-size:.8rem;background:var(--pink-light);color:var(--pink-deep);border-radius:20px;padding:.2rem .8rem;font-weight:700;display:inline-block;margin-bottom:.8rem}
+.modal-section-title{font-size:.8rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem;margin-top:.8rem}
+.modal-family-grid{display:flex;flex-wrap:wrap;gap:6px}
+.modal-family-item{background:var(--yellow-light);border:1px solid #f9d87a;border-radius:20px;padding:.25rem .8rem;font-size:.82rem;font-weight:600;color:var(--yellow-deep);cursor:pointer;display:flex;align-items:center;gap:5px;transition:.15s}
+.modal-family-item:hover{background:#fff0b0}
+
+@media(max-width:600px){
+  .quiz-options{grid-template-columns:1fr}
+  .header h1{font-size:1.6rem}
+  .fc-word{font-size:1.5rem}
+  .match-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>✨ Vocab 570</h1>
+    <p>Học từ vựng IELTS thật dễ thương 🌸</p>
+    <div class="stats-bar" id="statsBar"></div>
+  </div>
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-tab="vocab">📚 Từ vựng</button>
+    <button class="tab" data-tab="flashcard">🃏 Flashcard</button>
+    <button class="tab" data-tab="quiz">⚡ Quiz</button>
+    <button class="tab" data-tab="game">🎮 Trò chơi</button>
+    <button class="tab" data-tab="addvocab">➕ Thêm từ</button>
+    <button class="tab" data-tab="score">🏆 Bảng điểm</button>
+  </div>
+  <div id="tabContent"></div>
+</div>
+<div id="modalArea"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const VOCAB = [
+  {w:"Analysis",v:"Sự phân tích",f:"analyse / analyze | analyst | analytical | analytically",g:"Nhóm 1"},
+  {w:"Approach",v:"Phương pháp, tiếp cận",f:"approachable | unapproachable",g:"Nhóm 1"},
+  {w:"Area",v:"Phạm vi hiểu biết, chuyên môn",f:"",g:"Nhóm 1"},
+  {w:"Assess",v:"Đánh giá",f:"assessable | assessment | reassess | reassessment",g:"Nhóm 1"},
+  {w:"Assume",v:"Cho rằng, giả định",f:"assumed | assuming | assumption",g:"Nhóm 1"},
+  {w:"Authority",v:"Chuyên gia, chính quyền",f:"authoritative | authoritatively",g:"Nhóm 1"},
+  {w:"Available",v:"Có thể mua được, sử dụng được",f:"availability | unavailability | unavailable",g:"Nhóm 1"},
+  {w:"Benefit",v:"Lợi thế, lợi ích",f:"beneficial | beneficiary",g:"Nhóm 1"},
+  {w:"Concept",v:"Khái niệm",f:"conception | conceptual | conceptualize | conceptually",g:"Nhóm 1"},
+  {w:"Consist",v:"Bao gồm, gồm có",f:"consistency | inconsistency | consistent | inconsistent",g:"Nhóm 1"},
+  {w:"Constitute",v:"Thiết lập, thành lập",f:"constituency | constituent | constitution | constitutional",g:"Nhóm 1"},
+  {w:"Context",v:"Trong hoàn cảnh, bối cảnh",f:"contextual | contextualization | contextualize",g:"Nhóm 1"},
+  {w:"Contract",v:"Hợp đồng",f:"contractor",g:"Nhóm 1"},
+  {w:"Create",v:"Tạo ra, gây nên",f:"creation | recreation | creative | creatively | creativity | creator",g:"Nhóm 1"},
+  {w:"Data",v:"Thông tin, dữ liệu",f:"",g:"Nhóm 1"},
+  {w:"Define",v:"Xác định, chắc chắn",f:"definable | definition | redefine | redefinition | undefined",g:"Nhóm 1"},
+  {w:"Derive",v:"Nhận được, tìm thấy nguồn gốc từ",f:"derivation | derivative",g:"Nhóm 1"},
+  {w:"Distribute",v:"Phân phối, phân phát",f:"distribution | distributional | distributive | distributor | redistribute",g:"Nhóm 1"},
+  {w:"Economic",v:"Thuộc kinh tế",f:"economical | economically | economics | economist | economy | uneconomic",g:"Nhóm 1"},
+  {w:"Environment",v:"Môi trường",f:"environmental | environmentalism | environmentalist | environmentally",g:"Nhóm 1"},
+  {w:"Establish",v:"Thành lập, thiết lập, củng cố",f:"established | establishment | disestablish",g:"Nhóm 1"},
+  {w:"Estimate",v:"Định giá, đánh giá, ước lượng",f:"estimation | overestimate | underestimate",g:"Nhóm 1"},
+  {w:"Evident",v:"Hiển nhiên, rõ ràng",f:"evidence | evidential | evidently",g:"Nhóm 1"},
+  {w:"Export",v:"Xuất khẩu",f:"exporter",g:"Nhóm 1"},
+  {w:"Factor",v:"Nhân tố, yếu tố",f:"",g:"Nhóm 1"},
+  {w:"Finance",v:"Tài chính, tiền bạc",f:"financial | financially | financier",g:"Nhóm 1"},
+  {w:"Formula",v:"Công thức",f:"formulate | reformulate | formulation | reformulation",g:"Nhóm 1"},
+  {w:"Function",v:"Chức năng",f:"functional | functionally",g:"Nhóm 1"},
+  {w:"Identify",v:"Nhận ra, nhận diện",f:"identifiable | identification",g:"Nhóm 1"},
+  {w:"Income",v:"Thu nhập",f:"",g:"Nhóm 1"},
+  {w:"Indicate",v:"Chỉ ra, biểu lộ",f:"indication | indicative | indicator",g:"Nhóm 1"},
+  {w:"Individual",v:"Riêng rẽ, riêng biệt",f:"individualism | individualist | individuality | individually",g:"Nhóm 1"},
+  {w:"Interpret",v:"Giải thích, làm sáng tỏ",f:"interpretable | interpretation | interpretative | misinterpret | reinterpret",g:"Nhóm 1"},
+  {w:"Involve",v:"Bao gồm, dính dáng đến",f:"involved | involvement | uninvolved",g:"Nhóm 1"},
+  {w:"Issue",v:"Vấn đề",f:"issuer",g:"Nhóm 1"},
+  {w:"Labour",v:"Lao động chân tay",f:"labor",g:"Nhóm 1"},
+  {w:"Legal",v:"Hợp pháp",f:"legality | legally | illegal | illegality | illegally",g:"Nhóm 1"},
+  {w:"Legislate",v:"Lập pháp",f:"legislation | legislative | legislator | legislature",g:"Nhóm 1"},
+  {w:"Major",v:"Chính yếu, nghiêm trọng",f:"majority",g:"Nhóm 1"},
+  {w:"Method",v:"Phương pháp, cách thức",f:"methodical | methodically | methodological | methodology",g:"Nhóm 1"},
+  {w:"Occur",v:"Xảy ra, xảy đến",f:"occurrence | reoccur",g:"Nhóm 1"},
+  {w:"Percent",v:"Phần trăm",f:"percentage",g:"Nhóm 1"},
+  {w:"Period",v:"Giai đoạn, khoảng thời gian",f:"periodic | periodical | periodically",g:"Nhóm 1"},
+  {w:"Policy",v:"Chính sách, đường lối hành động",f:"",g:"Nhóm 1"},
+  {w:"Principle",v:"Nguyên tắc",f:"principled | unprincipled",g:"Nhóm 1"},
+  {w:"Proceed",v:"Tiếp tục, tiến hành",f:"procedural | procedure | proceeding | proceeds",g:"Nhóm 1"},
+  {w:"Process",v:"Quá trình, sự tiến triển",f:"processing",g:"Nhóm 1"},
+  {w:"Require",v:"Đòi hỏi, yêu cầu",f:"requirement",g:"Nhóm 1"},
+  {w:"Research",v:"Nghiên cứu",f:"researcher",g:"Nhóm 1"},
+  {w:"Respond",v:"Đáp lại, hưởng ứng",f:"respondent | response | responsive | unresponsive",g:"Nhóm 1"},
+  {w:"Role",v:"Vai trò",f:"",g:"Nhóm 1"},
+  {w:"Section",v:"Phần, khu vực",f:"",g:"Nhóm 1"},
+  {w:"Sector",v:"Khu vực (kinh tế, kỹ thuật)",f:"",g:"Nhóm 1"},
+  {w:"Significant",v:"Quan trọng, trọng đại, đầy ý nghĩa",f:"significance | significantly | signify | insignificant",g:"Nhóm 1"},
+  {w:"Similar",v:"Tương tự",f:"similarity | similarly",g:"Nhóm 1"},
+  {w:"Source",v:"Nguồn, nguồn gốc",f:"",g:"Nhóm 1"},
+  {w:"Specific",v:"Dứt khoát, rõ ràng, chi tiết",f:"specifically | specification | specificity | specifics",g:"Nhóm 1"},
+  {w:"Structure",v:"Cấu trúc",f:"structural | structurally | restructuring | restructure | unstructured",g:"Nhóm 1"},
+  {w:"Theory",v:"Giả định, học thuyết",f:"theoretical | theoretically | theoretician | theorist",g:"Nhóm 1"},
+  {w:"Vary",v:"Thay đổi (mức độ nhỏ)",f:"variability | variable | variably | variance | variant | variation | varied | invariable",g:"Nhóm 1"},
+  {w:"Achieve",v:"Thành công, đạt được",f:"achievable | achievement",g:"Nhóm 2"},
+  {w:"Acquire",v:"Thu được, đạt được",f:"acquisition",g:"Nhóm 2"},
+  {w:"Administration",v:"Sự trông nom, sự quản lý",f:"admin | administrative | administratively | administrator",g:"Nhóm 2"},
+  {w:"Affect",v:"Ảnh hưởng đến, tác động đến",f:"affective | affectively | unaffected",g:"Nhóm 2"},
+  {w:"Appropriate",v:"Phù hợp",f:"appropriacy | appropriately | inappropriacy | inappropriate | inappropriately",g:"Nhóm 2"},
+  {w:"Aspect",v:"Khía cạnh",f:"",g:"Nhóm 2"},
+  {w:"Assist",v:"Giúp đỡ",f:"assistance | assistant | unassisted",g:"Nhóm 2"},
+  {w:"Category",v:"Nhóm, danh mục",f:"categorical | categorically | categorization | categorize",g:"Nhóm 2"},
+  {w:"Chapter",v:"Chương (sách)",f:"",g:"Nhóm 2"},
+  {w:"Commission",v:"Mệnh lệnh, ra lệnh",f:"commissioner | decommission",g:"Nhóm 2"},
+  {w:"Community",v:"Phường, hội, cộng đồng",f:"communal | communally",g:"Nhóm 2"},
+  {w:"Complex",v:"Phức tạp",f:"complexity | complexities | uncomplicated",g:"Nhóm 2"},
+  {w:"Compute",v:"Ước tính, tính toán",f:"computation | computational | computer | computing",g:"Nhóm 2"},
+  {w:"Conclude",v:"Kết thúc",f:"conclusion | conclusive | conclusively | inconclusive",g:"Nhóm 2"},
+  {w:"Conduct",v:"Tiến hành, tổ chức",f:"misconduct",g:"Nhóm 2"},
+  {w:"Consequence",v:"Kết quả, hậu quả",f:"consequent | consequential | consequently | inconsequential",g:"Nhóm 2"},
+  {w:"Consumer",v:"Khách hàng, người tiêu dùng",f:"consume | consumption",g:"Nhóm 2"},
+  {w:"Credit",v:"Sự khen ngợi, tín dụng",f:"creditable | creditably | discredit",g:"Nhóm 2"},
+  {w:"Culture",v:"Văn hóa",f:"cultural | culturally | intercultural | multicultural",g:"Nhóm 2"},
+  {w:"Distinct",v:"Khác biệt, rõ ràng",f:"distinction | distinctive | distinctively | distinctly | indistinct",g:"Nhóm 2"},
+  {w:"Element",v:"Yếu tố",f:"elemental | elementary",g:"Nhóm 2"},
+  {w:"Equate",v:"Coi ngang, ngang với",f:"equation | equator | equatorial",g:"Nhóm 2"},
+  {w:"Evaluate",v:"Đánh giá, ước lượng",f:"evaluation | evaluative | re-evaluate | re-evaluation",g:"Nhóm 2"},
+  {w:"Feature",v:"Đặc trưng, đặc điểm",f:"",g:"Nhóm 2"},
+  {w:"Final",v:"Cuối cùng, quyết định",f:"finalize | finalization | finally | finals",g:"Nhóm 2"},
+  {w:"Focus",v:"Tập trung vào",f:"focused | unfocused",g:"Nhóm 2"},
+  {w:"Impact",v:"Tác động, ảnh hưởng",f:"",g:"Nhóm 2"},
+  {w:"Injure",v:"Làm hại, làm bị thương",f:"injurious | injuriously | injury",g:"Nhóm 2"},
+  {w:"Institute",v:"Thiết lập, lập ra",f:"institution | institutional | institutionalize",g:"Nhóm 2"},
+  {w:"Invest",v:"Đầu tư",f:"investment | investor | reinvest | reinvestment",g:"Nhóm 2"},
+  {w:"Item",v:"Điều khoản, khoản mục",f:"itemize",g:"Nhóm 2"},
+  {w:"Journal",v:"Tạp chí, nhật ký",f:"journalism | journalist | journalistic",g:"Nhóm 2"},
+  {w:"Maintain",v:"Giữ, duy trì",f:"maintenance | unmaintained",g:"Nhóm 2"},
+  {w:"Normal",v:"Bình thường",f:"normality | normalize | normally | abnormal | abnormally",g:"Nhóm 2"},
+  {w:"Obtain",v:"Đạt được, thu được",f:"obtainable | unobtainable",g:"Nhóm 2"},
+  {w:"Participate",v:"Tham gia",f:"participant | participation | participatory",g:"Nhóm 2"},
+  {w:"Perceive",v:"Nhận thức, nhận biết",f:"perception | perceptive | perceptively | imperceptible",g:"Nhóm 2"},
+  {w:"Positive",v:"Tích cực",f:"positively | positiveness | negativity | negative",g:"Nhóm 2"},
+  {w:"Potential",v:"Tiềm năng",f:"potentially",g:"Nhóm 2"},
+  {w:"Previous",v:"Trước đây, trước đó",f:"previously",g:"Nhóm 2"},
+  {w:"Primary",v:"Sơ cấp, ban đầu, chính yếu",f:"primarily",g:"Nhóm 2"},
+  {w:"Purchase",v:"Mua bán",f:"purchaser",g:"Nhóm 2"},
+  {w:"Range",v:"Phạm vi, dãy",f:"",g:"Nhóm 2"},
+  {w:"Region",v:"Vùng, khu vực",f:"regional | regionally",g:"Nhóm 2"},
+  {w:"Regulate",v:"Quy định, điều chỉnh",f:"regulation | regulatory | regulator | deregulate | deregulation",g:"Nhóm 2"},
+  {w:"Relevant",v:"Thích hợp, liên quan",f:"relevance | relevancy | irrelevance | irrelevant",g:"Nhóm 2"},
+  {w:"Reside",v:"Cư trú, sinh sống",f:"residence | resident | residential",g:"Nhóm 2"},
+  {w:"Resource",v:"Tài nguyên, nguồn lực",f:"resourceful | resourcefully | resourcefulness",g:"Nhóm 2"},
+  {w:"Restrict",v:"Hạn chế",f:"restriction | restrictive | restrictively | unrestricted",g:"Nhóm 2"},
+  {w:"Select",v:"Chọn lựa, tuyển chọn",f:"selection | selective | selectively",g:"Nhóm 2"},
+  {w:"Site",v:"Địa điểm, vị trí",f:"",g:"Nhóm 2"},
+  {w:"Strategy",v:"Chiến lược",f:"strategic | strategically | strategist",g:"Nhóm 2"},
+  {w:"Survey",v:"Khảo sát",f:"",g:"Nhóm 2"},
+  {w:"Text",v:"Văn bản, nguyên văn",f:"textual | textually",g:"Nhóm 2"},
+  {w:"Traditional",v:"Truyền thống",f:"tradition | traditionally | untraditional",g:"Nhóm 2"},
+  {w:"Transfer",v:"Chuyển, chuyển đổi",f:"transferable | transference | transferral",g:"Nhóm 2"},
+  {w:"Alternative",v:"Thay thế, khác",f:"alternatively",g:"Nhóm 3"},
+  {w:"Circumstance",v:"Hoàn cảnh, tình huống",f:"circumstantial | circumstantially",g:"Nhóm 3"},
+  {w:"Comment",v:"Bình luận, nhận xét",f:"commentary | commentator",g:"Nhóm 3"},
+  {w:"Compensate",v:"Bù đắp, đền bù",f:"compensation | compensatory",g:"Nhóm 3"},
+  {w:"Component",v:"Bộ phận, thành phần",f:"",g:"Nhóm 3"},
+  {w:"Consent",v:"Sự đồng ý, chấp thuận",f:"",g:"Nhóm 3"},
+  {w:"Considerable",v:"Đáng kể",f:"considerably",g:"Nhóm 3"},
+  {w:"Constant",v:"Bất biến, không đổi",f:"constantly | inconstant | inconstantly",g:"Nhóm 3"},
+  {w:"Constrain",v:"Bắt buộc, hạn chế",f:"constraint | unconstrained",g:"Nhóm 3"},
+  {w:"Contribute",v:"Đóng góp",f:"contribution | contributor | contributory",g:"Nhóm 3"},
+  {w:"Controversy",v:"Sự tranh luận, tranh cãi",f:"controversial | controversially | uncontroversial",g:"Nhóm 3"},
+  {w:"Converse",v:"Nói chuyện, trò chuyện",f:"conversely | conversation",g:"Nhóm 3"},
+  {w:"Cooperate",v:"Hợp tác",f:"cooperation | cooperative | cooperatively | uncooperative",g:"Nhóm 3"},
+  {w:"Coordinate",v:"Phối hợp, điều phối",f:"coordination | coordinator",g:"Nhóm 3"},
+  {w:"Core",v:"Trung tâm, cốt lõi",f:"",g:"Nhóm 3"},
+  {w:"Corporate",v:"Công ty",f:"corporation | incorporation | incorporate",g:"Nhóm 3"},
+  {w:"Correspond",v:"Tương ứng, phù hợp",f:"correspondence | corresponding | correspondingly",g:"Nhóm 3"},
+  {w:"Criteria",v:"Tiêu chuẩn, tiêu chí",f:"criterion",g:"Nhóm 3"},
+  {w:"Deduce",v:"Suy luận, kết luận",f:"deduction | deductive | deductively",g:"Nhóm 3"},
+  {w:"Demonstrate",v:"Chứng minh, biểu tình",f:"demonstration | demonstrative | demonstratively",g:"Nhóm 3"},
+  {w:"Document",v:"Tài liệu, văn kiện",f:"documentation | documentary",g:"Nhóm 3"},
+  {w:"Dominate",v:"Thống trị, chiếm ưu thế",f:"dominant | dominantly | domination | predominant",g:"Nhóm 3"},
+  {w:"Emphasis",v:"Sự nhấn mạnh",f:"emphasize | emphatic | emphatically",g:"Nhóm 3"},
+  {w:"Ensure",v:"Đảm bảo, chắc chắn",f:"",g:"Nhóm 3"},
+  {w:"Exclude",v:"Loại trừ, loại ra",f:"exclusion | exclusive | exclusively | exclusivity | inclusive",g:"Nhóm 3"},
+  {w:"Framework",v:"Khung, khuôn khổ",f:"",g:"Nhóm 3"},
+  {w:"Fund",v:"Quỹ, cấp vốn",f:"fundamental | fundamentally | funding | fundamentalism",g:"Nhóm 3"},
+  {w:"Illustrate",v:"Minh họa",f:"illustration | illustrative | illustratively",g:"Nhóm 3"},
+  {w:"Immigrate",v:"Nhập cư",f:"immigrant | immigration | emigrate | emigrant | emigration",g:"Nhóm 3"},
+  {w:"Imply",v:"Hàm ý, ngụ ý",f:"implication | implicit | implicitly",g:"Nhóm 3"},
+  {w:"Initial",v:"Ban đầu",f:"initially",g:"Nhóm 3"},
+  {w:"Instance",v:"Trường hợp, ví dụ",f:"instantiate",g:"Nhóm 3"},
+  {w:"Interact",v:"Tương tác",f:"interaction | interactive | interactively",g:"Nhóm 3"},
+  {w:"Justify",v:"Biện hộ, chứng minh",f:"justifiable | justifiably | justification | unjustified",g:"Nhóm 3"},
+  {w:"Layer",v:"Lớp, tầng",f:"",g:"Nhóm 3"},
+  {w:"Link",v:"Liên kết, mối liên hệ",f:"linkage",g:"Nhóm 3"},
+  {w:"Locate",v:"Đặt, xác định vị trí",f:"location | relocation | relocate",g:"Nhóm 3"},
+  {w:"Maximize",v:"Tối đa hóa",f:"maximum | maximal | maximally",g:"Nhóm 3"},
+  {w:"Minimize",v:"Tối thiểu hóa",f:"minimum | minimal | minimally",g:"Nhóm 3"},
+  {w:"Network",v:"Mạng lưới",f:"networking | networked",g:"Nhóm 3"},
+  {w:"Notion",v:"Khái niệm, ý niệm",f:"",g:"Nhóm 3"},
+  {w:"Outcome",v:"Kết quả",f:"",g:"Nhóm 3"},
+  {w:"Output",v:"Sản phẩm, đầu ra",f:"",g:"Nhóm 3"},
+  {w:"Overall",v:"Tổng thể, toàn bộ",f:"",g:"Nhóm 3"},
+  {w:"Parallel",v:"Song song, tương đương",f:"",g:"Nhóm 3"},
+  {w:"Parameter",v:"Thông số",f:"parametric",g:"Nhóm 3"},
+  {w:"Phase",v:"Giai đoạn",f:"",g:"Nhóm 3"},
+  {w:"Predict",v:"Tiên đoán, dự báo",f:"prediction | predictable | predictably | unpredictable",g:"Nhóm 3"},
+  {w:"Principal",v:"Hiệu trưởng, người đứng đầu",f:"principally",g:"Nhóm 3"},
+  {w:"Prior",v:"Trước đó, ưu tiên hơn",f:"priority | prioritize",g:"Nhóm 3"},
+  {w:"Professional",v:"Chuyên nghiệp",f:"professionally | professionalism | profession",g:"Nhóm 3"},
+  {w:"Project",v:"Dự án, phóng chiếu",f:"projection | projector",g:"Nhóm 3"},
+  {w:"Promote",v:"Xúc tiến, quảng bá",f:"promotion | promotional",g:"Nhóm 3"},
+  {w:"Proportion",v:"Tỷ lệ, phần",f:"proportional | proportionally | disproportionate | disproportionately",g:"Nhóm 3"},
+  {w:"Publish",v:"Xuất bản",f:"publication | publisher | publishing | unpublished",g:"Nhóm 3"},
+  {w:"React",v:"Phản ứng",f:"reaction | reactive | reactivity | overreact",g:"Nhóm 3"},
+  {w:"Register",v:"Đăng ký, ghi lại",f:"registration | registered | unregistered",g:"Nhóm 3"},
+  {w:"Rely",v:"Tin tưởng, dựa vào",f:"reliability | reliable | reliably | unreliable",g:"Nhóm 3"},
+  {w:"Scheme",v:"Kế hoạch, phương án",f:"",g:"Nhóm 3"},
+  {w:"Sequence",v:"Chuỗi, trình tự",f:"sequential | sequentially",g:"Nhóm 3"},
+  {w:"Sex",v:"Giới tính",f:"sexual | sexuality | asexual",g:"Nhóm 3"},
+  {w:"Shift",v:"Sự thay đổi, ca làm việc",f:"",g:"Nhóm 3"},
+  {w:"Specify",v:"Xác định rõ",f:"specification | specific | specifically",g:"Nhóm 3"},
+  {w:"Sufficient",v:"Đủ, thỏa đáng",f:"sufficiency | sufficiently | insufficient | insufficiently",g:"Nhóm 3"},
+  {w:"Task",v:"Nhiệm vụ",f:"",g:"Nhóm 3"},
+  {w:"Technical",v:"Kỹ thuật",f:"technically | technique | technology | technological",g:"Nhóm 3"},
+  {w:"Abandon",v:"Từ bỏ",f:"abandonment",g:"Nhóm 4"},
+  {w:"Acknowledge",v:"Thừa nhận",f:"acknowledgement",g:"Nhóm 4"},
+  {w:"Aggregate",v:"Tổng hợp, tập hợp",f:"aggregation",g:"Nhóm 4"},
+  {w:"Allocate",v:"Phân bổ, phân phối",f:"allocation",g:"Nhóm 4"},
+  {w:"Amend",v:"Sửa đổi",f:"amendment",g:"Nhóm 4"},
+  {w:"Anticipate",v:"Tiên liệu, đoán trước",f:"anticipation",g:"Nhóm 4"},
+  {w:"Apparent",v:"Rõ ràng, hiển nhiên",f:"apparently",g:"Nhóm 4"},
+  {w:"Appreciate",v:"Đánh giá cao, trân trọng",f:"appreciation | appreciative | appreciatively",g:"Nhóm 4"},
+  {w:"Arbitrary",v:"Tùy tiện, tùy ý",f:"arbitrarily",g:"Nhóm 4"},
+  {w:"Articulate",v:"Diễn đạt rõ ràng",f:"articulation",g:"Nhóm 4"},
+  {w:"Attribute",v:"Thuộc tính, gán cho",f:"attribution",g:"Nhóm 4"},
+  {w:"Author",v:"Tác giả",f:"authorship",g:"Nhóm 4"},
+  {w:"Bond",v:"Trái phiếu, liên kết",f:"bonding | bonded",g:"Nhóm 4"},
+  {w:"Brief",v:"Ngắn gọn, bản tóm tắt",f:"briefing | briefly | brevity",g:"Nhóm 4"},
+  {w:"Capable",v:"Có khả năng",f:"capability | incapable | incapability",g:"Nhóm 4"},
+  {w:"Cite",v:"Trích dẫn",f:"citation",g:"Nhóm 4"},
+  {w:"Civil",v:"Dân sự",f:"civilian | civility | civically",g:"Nhóm 4"},
+  {w:"Clarify",v:"Làm rõ",f:"clarification",g:"Nhóm 4"},
+  {w:"Classic",v:"Kinh điển, cổ điển",f:"classical | classically | classicism",g:"Nhóm 4"},
+  {w:"Comprehensive",v:"Toàn diện",f:"comprehensively | comprehension",g:"Nhóm 4"},
+  {w:"Comprise",v:"Gồm có, bao gồm",f:"",g:"Nhóm 4"},
+  {w:"Confirm",v:"Xác nhận",f:"confirmation | confirmatory | unconfirmed",g:"Nhóm 4"},
+  {w:"Conflict",v:"Xung đột, mâu thuẫn",f:"conflicting",g:"Nhóm 4"},
+  {w:"Conform",v:"Tuân theo, phù hợp",f:"conformity | nonconformity | nonconformist",g:"Nhóm 4"},
+  {w:"Consent",v:"Đồng ý, chấp thuận",f:"",g:"Nhóm 4"},
+  {w:"Controversy",v:"Tranh luận, tranh cãi",f:"controversial",g:"Nhóm 4"},
+  {w:"Convert",v:"Chuyển đổi",f:"conversion | convertible | inconvertible",g:"Nhóm 4"},
+  {w:"Convince",v:"Thuyết phục",f:"convincing | convincingly | unconvinced",g:"Nhóm 4"},
+  {w:"Couple",v:"Cặp đôi, kết hợp",f:"",g:"Nhóm 4"},
+  {w:"Decade",v:"Thập kỷ",f:"decadal",g:"Nhóm 4"},
+  {w:"Deny",v:"Phủ nhận, từ chối",f:"denial",g:"Nhóm 4"},
+  {w:"Devote",v:"Cống hiến, dành cho",f:"devotion | devoted | devotee",g:"Nhóm 4"},
+  {w:"Differentiate",v:"Phân biệt",f:"differentiation | differential",g:"Nhóm 4"},
+  {w:"Domestic",v:"Trong nước, gia đình",f:"domestically | domesticity",g:"Nhóm 4"},
+  {w:"Emerge",v:"Nổi lên, xuất hiện",f:"emergence | emergent | emergency",g:"Nhóm 4"},
+  {w:"Empirical",v:"Thực nghiệm",f:"empirically | empiricism | empiricist",g:"Nhóm 4"},
+  {w:"Enable",v:"Cho phép, tạo điều kiện",f:"",g:"Nhóm 4"},
+  {w:"Encounter",v:"Gặp gỡ, đối mặt",f:"",g:"Nhóm 4"},
+  {w:"Enhance",v:"Nâng cao, tăng cường",f:"enhancement",g:"Nhóm 4"},
+  {w:"Enormous",v:"Khổng lồ, rất lớn",f:"enormously | enormousness",g:"Nhóm 4"},
+  {w:"Ethics",v:"Đạo đức học",f:"ethical | ethically | unethical",g:"Nhóm 4"},
+  {w:"Expand",v:"Mở rộng",f:"expansion | expansive | expansively",g:"Nhóm 4"},
+  {w:"Explicit",v:"Rõ ràng, dứt khoát",f:"explicitly | explicitness | implicit",g:"Nhóm 4"},
+  {w:"Exploit",v:"Khai thác, lợi dụng",f:"exploitation | exploitative",g:"Nhóm 4"},
+  {w:"External",v:"Bên ngoài",f:"externally",g:"Nhóm 4"},
+  {w:"Facilitate",v:"Tạo điều kiện, hỗ trợ",f:"facilitation | facilitator",g:"Nhóm 4"},
+  {w:"Generation",v:"Thế hệ",f:"generate | generational",g:"Nhóm 4"},
+  {w:"Global",v:"Toàn cầu",f:"globally | globalization | globalize",g:"Nhóm 4"},
+  {w:"Hypothesis",v:"Giả thuyết",f:"hypothesize | hypothetical | hypothetically",g:"Nhóm 4"},
+  {w:"Impose",v:"Áp đặt",f:"imposition",g:"Nhóm 4"},
+  {w:"Incentive",v:"Động lực, khuyến khích",f:"",g:"Nhóm 4"},
+  {w:"Incorporate",v:"Kết hợp, hợp nhất",f:"incorporation",g:"Nhóm 4"},
+  {w:"Index",v:"Chỉ số, danh mục",f:"indexation | indexed",g:"Nhóm 4"},
+  {w:"Infer",v:"Suy luận, suy ra",f:"inference | inferential",g:"Nhóm 4"},
+  {w:"Infrastructure",v:"Cơ sở hạ tầng",f:"",g:"Nhóm 4"},
+  {w:"Innovate",v:"Đổi mới, sáng tạo",f:"innovation | innovative | innovatively | innovator",g:"Nhóm 4"},
+  {w:"Input",v:"Đầu vào, nhập dữ liệu",f:"",g:"Nhóm 4"},
+  {w:"Integrate",v:"Tích hợp",f:"integration | integrated | disintegrate",g:"Nhóm 5"},
+  {w:"Intense",v:"Mãnh liệt, dữ dội",f:"intensely | intensity | intensify",g:"Nhóm 5"},
+  {w:"Internal",v:"Bên trong, nội bộ",f:"internally | internalize",g:"Nhóm 5"},
+  {w:"Manipulate",v:"Thao túng, điều khiển",f:"manipulation | manipulative | manipulator",g:"Nhóm 5"},
+  {w:"Mature",v:"Trưởng thành, chín muồi",f:"maturity | maturation | immature | immaturity",g:"Nhóm 5"},
+  {w:"Migrate",v:"Di cư",f:"migration | migrant | migratory",g:"Nhóm 5"},
+  {w:"Military",v:"Quân sự",f:"",g:"Nhóm 5"},
+  {w:"Minimum",v:"Tối thiểu",f:"minimal | minimize | minimally",g:"Nhóm 5"},
+  {w:"Mode",v:"Phương thức, kiểu",f:"modal | modality",g:"Nhóm 5"},
+  {w:"Modify",v:"Sửa đổi, điều chỉnh",f:"modification | modifier | unmodified",g:"Nhóm 5"},
+  {w:"Monitor",v:"Giám sát",f:"monitoring",g:"Nhóm 5"},
+  {w:"Motive",v:"Động cơ, lý do",f:"motivation | motivate | motivational",g:"Nhóm 5"},
+  {w:"Neutral",v:"Trung lập",f:"neutralize | neutrality | neutralization",g:"Nhóm 5"},
+  {w:"Nevertheless",v:"Tuy nhiên, dù sao đi nữa",f:"",g:"Nhóm 5"},
+  {w:"Notwithstanding",v:"Mặc dù, tuy nhiên",f:"",g:"Nhóm 5"},
+  {w:"Obvious",v:"Rõ ràng, hiển nhiên",f:"obviously | obviousness",g:"Nhóm 5"},
+  {w:"Occupy",v:"Chiếm đóng, bận rộn",f:"occupation | occupational | occupant | preoccupy",g:"Nhóm 5"},
+  {w:"Option",v:"Lựa chọn, tùy chọn",f:"optional | optionally",g:"Nhóm 5"},
+  {w:"Orientate",v:"Định hướng",f:"orientation | disorientation",g:"Nhóm 5"},
+  {w:"Perspective",v:"Quan điểm, cách nhìn",f:"",g:"Nhóm 5"},
+  {w:"Phenomenon",v:"Hiện tượng",f:"phenomenal | phenomenally | phenomena",g:"Nhóm 5"},
+  {w:"Pose",v:"Đặt ra, đặt vị trí",f:"",g:"Nhóm 5"},
+  {w:"Practitioner",v:"Người thực hành",f:"practice | practical | practically",g:"Nhóm 5"},
+  {w:"Precede",v:"Đi trước, có trước",f:"precedence | precedent | preceding | unprecedented",g:"Nhóm 5"},
+  {w:"Premise",v:"Tiền đề, cơ sở",f:"",g:"Nhóm 5"},
+  {w:"Prohibit",v:"Cấm đoán",f:"prohibition | prohibitive | prohibitively",g:"Nhóm 5"},
+  {w:"Protocol",v:"Giao thức, nghi thức",f:"",g:"Nhóm 5"},
+  {w:"Psychology",v:"Tâm lý học",f:"psychological | psychologically | psychologist",g:"Nhóm 5"},
+  {w:"Pursue",v:"Theo đuổi",f:"pursuit",g:"Nhóm 5"},
+  {w:"Qualitative",v:"Chất lượng",f:"qualitatively",g:"Nhóm 5"},
+  {w:"Quantitative",v:"Số lượng",f:"quantitatively | quantify | quantification",g:"Nhóm 5"},
+  {w:"Rational",v:"Hợp lý, duy lý",f:"rationality | rationally | rationalize | irrational",g:"Nhóm 5"},
+  {w:"Reinforce",v:"Củng cố, tăng cường",f:"reinforcement",g:"Nhóm 5"},
+  {w:"Reject",v:"Từ chối, bác bỏ",f:"rejection",g:"Nhóm 5"},
+  {w:"Reveal",v:"Tiết lộ, phát hiện",f:"revelation | revealing | revealingly",g:"Nhóm 5"},
+  {w:"Revenue",v:"Doanh thu",f:"",g:"Nhóm 5"},
+  {w:"Revise",v:"Xem lại, sửa chữa",f:"revision | revisionary",g:"Nhóm 5"},
+  {w:"Revolution",v:"Cuộc cách mạng",f:"revolutionary | revolutionize",g:"Nhóm 5"},
+  {w:"Rigid",v:"Cứng nhắc, nghiêm khắc",f:"rigidity | rigidly",g:"Nhóm 5"},
+  {w:"Route",v:"Đường, tuyến đường",f:"routing",g:"Nhóm 5"},
+  {w:"Scenario",v:"Kịch bản",f:"",g:"Nhóm 5"},
+  {w:"Schedule",v:"Lịch trình",f:"scheduled | unscheduled",g:"Nhóm 5"},
+  {w:"Scope",v:"Phạm vi",f:"",g:"Nhóm 5"},
+  {w:"Seek",v:"Tìm kiếm",f:"",g:"Nhóm 5"},
+  {w:"Simulate",v:"Mô phỏng",f:"simulation | simulator",g:"Nhóm 5"},
+  {w:"Sole",v:"Duy nhất, chỉ một mình",f:"solely",g:"Nhóm 5"},
+  {w:"Somewhat",v:"Đôi chút, phần nào",f:"",g:"Nhóm 5"},
+  {w:"Stable",v:"Ổn định",f:"stability | stabilize | unstable | instability",g:"Nhóm 5"},
+  {w:"Subordinate",v:"Cấp dưới, phụ thuộc",f:"subordination",g:"Nhóm 5"},
+  {w:"Subsequent",v:"Tiếp sau, kế tiếp",f:"subsequently",g:"Nhóm 5"},
+  {w:"Substitute",v:"Thay thế",f:"substitution | substitutive",g:"Nhóm 5"},
+  {w:"Abstract",v:"Trừu tượng, tóm tắt",f:"abstractly | abstraction",g:"Nhóm 6"},
+  {w:"Accurate",v:"Chính xác",f:"accuracy | accurately | inaccuracy | inaccurate | inaccurately",g:"Nhóm 6"},
+  {w:"Adjacent",v:"Liền kề, kế bên",f:"adjacency",g:"Nhóm 6"},
+  {w:"Analogy",v:"Sự tương tự, phép loại suy",f:"analogous | analogously",g:"Nhóm 6"},
+  {w:"Annul",v:"Hủy bỏ, vô hiệu hóa",f:"annulment",g:"Nhóm 6"},
+  {w:"Anticipate",v:"Dự đoán, tiên liệu",f:"anticipation | unanticipated",g:"Nhóm 6"},
+  {w:"Assemble",v:"Lắp ráp, tập hợp",f:"assembly | assemblage | disassemble",g:"Nhóm 6"},
+  {w:"Assert",v:"Xác nhận, khẳng định",f:"assertion | assertive | assertively",g:"Nhóm 6"},
+  {w:"Assign",v:"Giao nhiệm vụ, chỉ định",f:"assignment",g:"Nhóm 6"},
+  {w:"Bias",v:"Thiên kiến, sự thiên vị",f:"biased | unbiased",g:"Nhóm 6"},
+  {w:"Capacity",v:"Năng lực, khả năng chứa",f:"incapacity",g:"Nhóm 6"},
+  {w:"Challenge",v:"Thách thức",f:"challenging | challenger",g:"Nhóm 6"},
+  {w:"Channel",v:"Kênh, luồng",f:"channelize",g:"Nhóm 6"},
+  {w:"Chart",v:"Biểu đồ, sơ đồ",f:"",g:"Nhóm 6"},
+  {w:"Clause",v:"Điều khoản",f:"",g:"Nhóm 6"},
+  {w:"Coherent",v:"Mạch lạc, liên kết",f:"coherence | coherently | incoherent | incoherence",g:"Nhóm 6"},
+  {w:"Coincide",v:"Trùng hợp",f:"coincidence | coincidental | coincidentally",g:"Nhóm 6"},
+  {w:"Collapse",v:"Sụp đổ, đổ vỡ",f:"",g:"Nhóm 6"},
+  {w:"Collect",v:"Thu thập",f:"collection | collective | collectively | collector",g:"Nhóm 6"},
+  {w:"Commit",v:"Cam kết, thực hiện",f:"commitment | commission | decommission",g:"Nhóm 6"},
+  {w:"Commodity",v:"Hàng hóa",f:"",g:"Nhóm 6"},
+  {w:"Communicate",v:"Giao tiếp, truyền đạt",f:"communication | communicative",g:"Nhóm 6"},
+  {w:"Concentrate",v:"Tập trung",f:"concentration | concentrated",g:"Nhóm 6"},
+  {w:"Controversy",v:"Sự tranh luận",f:"controversial | controversially",g:"Nhóm 6"},
+  {w:"Convention",v:"Thông lệ, quy ước",f:"conventional | conventionally | unconventional",g:"Nhóm 6"},
+  {w:"Correspond",v:"Tương ứng",f:"correspondence | corresponding | correspondent",g:"Nhóm 6"},
+  {w:"Decline",v:"Từ chối, giảm sút",f:"declination",g:"Nhóm 6"},
+  {w:"Dedicate",v:"Dành tặng, cống hiến",f:"dedication | dedicated",g:"Nhóm 6"},
+  {w:"Diminish",v:"Giảm bớt, làm nhỏ đi",f:"diminution | diminishing",g:"Nhóm 6"},
+  {w:"Discriminate",v:"Phân biệt đối xử",f:"discrimination | discriminatory | indiscriminate",g:"Nhóm 6"},
+  {w:"Display",v:"Trưng bày, hiển thị",f:"",g:"Nhóm 6"},
+  {w:"Diverse",v:"Đa dạng",f:"diversify | diversity | diversification",g:"Nhóm 6"},
+  {w:"Dynamic",v:"Năng động, linh hoạt",f:"dynamically | dynamics",g:"Nhóm 6"},
+  {w:"Eliminate",v:"Loại bỏ",f:"elimination | eliminatory",g:"Nhóm 6"},
+  {w:"Elite",v:"Ưu tú, tinh hoa",f:"elitism | elitist",g:"Nhóm 6"},
+  {w:"Equip",v:"Trang bị",f:"equipment",g:"Nhóm 6"},
+  {w:"Exceed",v:"Vượt qua",f:"excess | excessive | excessively",g:"Nhóm 6"},
+  {w:"Expose",v:"Phơi bày, tiếp xúc",f:"exposure | exposition",g:"Nhóm 6"},
+  {w:"Finite",v:"Hữu hạn",f:"finitely | infinite | infinitely | infinity",g:"Nhóm 6"},
+  {w:"Flexible",v:"Linh hoạt",f:"flexibility | inflexible | inflexibility",g:"Nhóm 6"},
+  {w:"Foundation",v:"Nền tảng",f:"found | foundational",g:"Nhóm 6"},
+  {w:"Generate",v:"Tạo ra, phát sinh",f:"generation | generator",g:"Nhóm 6"},
+  {w:"Inherent",v:"Vốn có, cố hữu",f:"inherently",g:"Nhóm 6"},
+  {w:"Initiate",v:"Khởi xướng",f:"initiation | initiative | initiator",g:"Nhóm 6"},
+  {w:"Abstract",v:"Tóm tắt, trừu tượng",f:"abstractly",g:"Nhóm 7"},
+  {w:"Acquire",v:"Có được, mua được",f:"acquisition",g:"Nhóm 7"},
+  {w:"Adapt",v:"Thích nghi",f:"adaptation | adaptable | adaptability | inadaptable",g:"Nhóm 7"},
+  {w:"Adjacent",v:"Kế cận, liền kề",f:"adjacency | adjacently",g:"Nhóm 7"},
+  {w:"Advocate",v:"Ủng hộ, biện hộ",f:"advocacy | advocacy",g:"Nhóm 7"},
+  {w:"Aid",v:"Giúp đỡ, viện trợ",f:"",g:"Nhóm 7"},
+  {w:"Albeit",v:"Mặc dù",f:"",g:"Nhóm 7"},
+  {w:"Allocate",v:"Phân bổ, phân chia",f:"allocation | reallocate | reallocation",g:"Nhóm 7"},
+  {w:"Ambiguous",v:"Không rõ ràng, mơ hồ",f:"ambiguity | ambiguously | unambiguous",g:"Nhóm 7"},
+  {w:"Analogous",v:"Tương tự, giống như",f:"analogy | analogously",g:"Nhóm 7"},
+  {w:"Analyse",v:"Phân tích",f:"analysis | analyst | analytical | analytically",g:"Nhóm 7"},
+  {w:"Annual",v:"Hàng năm",f:"annually",g:"Nhóm 7"},
+  {w:"Anticipate",v:"Dự đoán",f:"anticipation | unanticipated",g:"Nhóm 7"},
+  {w:"Arbitrary",v:"Tùy tiện",f:"arbitrarily",g:"Nhóm 7"},
+  {w:"Assign",v:"Phân công",f:"assignment | reassign",g:"Nhóm 7"},
+  {w:"Attitude",v:"Thái độ",f:"",g:"Nhóm 7"},
+  {w:"Attribute",v:"Đặc tính, quy cho",f:"attribution | attributive",g:"Nhóm 7"},
+  {w:"Automate",v:"Tự động hóa",f:"automation | automated | automatic | automatically",g:"Nhóm 7"},
+  {w:"Bias",v:"Thiên vị",f:"biased | unbiased",g:"Nhóm 7"},
+  {w:"Capacity",v:"Khả năng, dung tích",f:"incapacitate",g:"Nhóm 7"},
+  {w:"Category",v:"Phạm trù, loại",f:"categorical | categorically | categorize",g:"Nhóm 7"},
+  {w:"Cease",v:"Ngừng lại",f:"ceaseless | ceaselessly",g:"Nhóm 7"},
+  {w:"Chart",v:"Biểu đồ",f:"",g:"Nhóm 7"},
+  {w:"Clarify",v:"Làm rõ ràng",f:"clarification | clarity | unclear",g:"Nhóm 7"},
+  {w:"Cognitive",v:"Nhận thức",f:"cognitively | cognition",g:"Nhóm 7"},
+  {w:"Coherent",v:"Gắn kết, mạch lạc",f:"coherence | coherently | incoherence",g:"Nhóm 7"},
+  {w:"Coincide",v:"Xảy ra đồng thời",f:"coincidence | coincidental",g:"Nhóm 7"},
+  {w:"Compatible",v:"Tương thích, phù hợp",f:"compatibility | incompatible | incompatibility",g:"Nhóm 7"},
+  {w:"Complement",v:"Bổ sung",f:"complementary | complementarity",g:"Nhóm 7"},
+  {w:"Comply",v:"Tuân thủ",f:"compliance | compliant | noncompliance | noncompliant",g:"Nhóm 7"},
+  {w:"Comprehensive",v:"Toàn diện, đầy đủ",f:"comprehensively | comprehend | comprehension",g:"Nhóm 7"},
+  {w:"Comprise",v:"Bao gồm",f:"",g:"Nhóm 7"},
+  {w:"Conceive",v:"Nghĩ ra, thai nghén",f:"conception | concept | conceptual | inconceivable",g:"Nhóm 7"},
+  {w:"Confine",v:"Giới hạn, giam cầm",f:"confinement | confined",g:"Nhóm 7"},
+  {w:"Constrain",v:"Ràng buộc",f:"constraint | unconstrained",g:"Nhóm 7"},
+  {w:"Consume",v:"Tiêu thụ",f:"consumption | consumer | consuming",g:"Nhóm 7"},
+  {w:"Contemporary",v:"Đương đại, hiện đại",f:"contemporarily",g:"Nhóm 7"},
+  {w:"Contrast",v:"Tương phản",f:"contrasting | contrastingly",g:"Nhóm 7"},
+  {w:"Controversial",v:"Gây tranh cãi",f:"controversy | controversially",g:"Nhóm 7"},
+  {w:"Convert",v:"Chuyển đổi",f:"conversion | convertible | converter",g:"Nhóm 7"},
+  {w:"Cooperate",v:"Hợp tác",f:"cooperation | cooperative | uncooperative",g:"Nhóm 7"},
+  {w:"Correlate",v:"Có mối tương quan",f:"correlation | correlative",g:"Nhóm 7"},
+  {w:"Couple",v:"Kết hợp",f:"",g:"Nhóm 7"},
+  {w:"Currency",v:"Tiền tệ",f:"current | currently",g:"Nhóm 7"},
+  {w:"Debate",v:"Tranh luận",f:"debatable | debatably",g:"Nhóm 8"},
+  {w:"Decline",v:"Giảm dần, từ chối",f:"declination | declining",g:"Nhóm 8"},
+  {w:"Denote",v:"Biểu thị, ký hiệu",f:"denotation | denotative",g:"Nhóm 8"},
+  {w:"Detect",v:"Phát hiện",f:"detection | detective | detector",g:"Nhóm 8"},
+  {w:"Deviate",v:"Đi lệch, chệch hướng",f:"deviation | deviant | deviate",g:"Nhóm 8"},
+  {w:"Dimension",v:"Kích thước, chiều",f:"dimensional | dimensionality",g:"Nhóm 8"},
+  {w:"Discrete",v:"Rời rạc, riêng biệt",f:"discretely | discreteness | indiscrete",g:"Nhóm 8"},
+  {w:"Discriminate",v:"Phân biệt, kỳ thị",f:"discrimination | discriminatory | indiscriminate",g:"Nhóm 8"},
+  {w:"Display",v:"Trưng bày",f:"",g:"Nhóm 8"},
+  {w:"Dispose",v:"Sắp xếp, xử lý",f:"disposal | disposition | indisposed",g:"Nhóm 8"},
+  {w:"Dissolve",v:"Hòa tan, giải thể",f:"dissolution",g:"Nhóm 8"},
+  {w:"Distort",v:"Bóp méo, làm biến dạng",f:"distortion | distorted",g:"Nhóm 8"},
+  {w:"Diverse",v:"Đa dạng",f:"diversify | diversity | diversification",g:"Nhóm 8"},
+  {w:"Domain",v:"Lĩnh vực, tên miền",f:"",g:"Nhóm 8"},
+  {w:"Dominate",v:"Thống trị",f:"dominant | domination | predominantly",g:"Nhóm 8"},
+  {w:"Draft",v:"Bản nháp, soạn thảo",f:"",g:"Nhóm 8"},
+  {w:"Eliminate",v:"Loại trừ",f:"elimination",g:"Nhóm 8"},
+  {w:"Empirical",v:"Kinh nghiệm, thực nghiệm",f:"empirically | empiricism",g:"Nhóm 8"},
+  {w:"Enhance",v:"Nâng cao",f:"enhancement | enhancer",g:"Nhóm 8"},
+  {w:"Entity",v:"Thực thể",f:"",g:"Nhóm 8"},
+  {w:"Equivalent",v:"Tương đương",f:"equivalently | equivalence",g:"Nhóm 8"},
+  {w:"Evolution",v:"Sự tiến hóa",f:"evolve | evolutionary | evolutionist",g:"Nhóm 8"},
+  {w:"Expand",v:"Mở rộng",f:"expansion | expansive",g:"Nhóm 8"},
+  {w:"Explicit",v:"Rõ ràng",f:"explicitly | explicitness | implicit",g:"Nhóm 8"},
+  {w:"Extract",v:"Trích xuất",f:"extraction | extractable",g:"Nhóm 8"},
+  {w:"Facilitate",v:"Tạo điều kiện",f:"facilitation | facilitator",g:"Nhóm 8"},
+  {w:"Finite",v:"Hữu hạn",f:"finitely | infinite | infinitely",g:"Nhóm 8"},
+  {w:"Flexible",v:"Linh hoạt",f:"flexibility | inflexible",g:"Nhóm 8"},
+  {w:"Fluctuate",v:"Dao động",f:"fluctuation",g:"Nhóm 8"},
+  {w:"Format",v:"Định dạng",f:"formatting",g:"Nhóm 8"},
+  {w:"Foundation",v:"Nền tảng",f:"foundational | fundamental",g:"Nhóm 8"},
+  {w:"Generate",v:"Tạo ra, sinh ra",f:"generation | generator",g:"Nhóm 8"},
+  {w:"Hierarchy",v:"Hệ thống cấp bậc",f:"hierarchical | hierarchically",g:"Nhóm 8"},
+  {w:"Highlight",v:"Làm nổi bật",f:"",g:"Nhóm 8"},
+  {w:"Hypothesis",v:"Giả thuyết",f:"hypothesize | hypothetical",g:"Nhóm 8"},
+  {w:"Identical",v:"Giống hệt, đồng nhất",f:"identically | identity | identification",g:"Nhóm 8"},
+  {w:"Ideology",v:"Ý thức hệ",f:"ideological | ideologically | ideologist",g:"Nhóm 8"},
+  {w:"Imply",v:"Hàm ý",f:"implication | implicit | implicitly",g:"Nhóm 8"},
+  {w:"Impose",v:"Áp đặt",f:"imposition",g:"Nhóm 8"},
+  {w:"Incline",v:"Có xu hướng",f:"inclination | inclined",g:"Nhóm 8"},
+  {w:"Induce",v:"Thúc đẩy, gây ra",f:"induction | inductive | inductively",g:"Nhóm 8"},
+  {w:"Infer",v:"Suy luận",f:"inference | inferential",g:"Nhóm 8"},
+  {w:"Inhibit",v:"Ức chế, ngăn cản",f:"inhibition | inhibitor | uninhibited",g:"Nhóm 8"},
+  {w:"Innovate",v:"Đổi mới",f:"innovation | innovative | innovator",g:"Nhóm 8"},
+  {w:"Insert",v:"Chèn vào",f:"insertion",g:"Nhóm 8"},
+  {w:"Inspect",v:"Kiểm tra, thanh tra",f:"inspection | inspector",g:"Nhóm 8"},
+  {w:"Intellectual",v:"Trí tuệ",f:"intellectually | intellectualism",g:"Nhóm 8"},
+  {w:"Intervene",v:"Can thiệp",f:"intervention | interventionist",g:"Nhóm 8"},
+  {w:"Intrinsic",v:"Cơ bản, thuộc về bản chất",f:"intrinsically",g:"Nhóm 8"},
+  {w:"Investigate",v:"Điều tra",f:"investigation | investigative | investigator",g:"Nhóm 8"},
+  {w:"Invoke",v:"Viện dẫn, kêu gọi",f:"invocation",g:"Nhóm 8"},
+  {w:"Isolate",v:"Cô lập",f:"isolation | isolated",g:"Nhóm 8"},
+  {w:"Liberal",v:"Tự do, phóng khoáng",f:"liberally | liberalize | liberalism | liberalization",g:"Nhóm 9"},
+  {w:"Manipulate",v:"Thao túng",f:"manipulation | manipulative",g:"Nhóm 9"},
+  {w:"Mechanism",v:"Cơ chế",f:"mechanical | mechanically",g:"Nhóm 9"},
+  {w:"Media",v:"Phương tiện truyền thông",f:"medium",g:"Nhóm 9"},
+  {w:"Mediate",v:"Hòa giải, trung gian",f:"mediation | mediator",g:"Nhóm 9"},
+  {w:"Migrate",v:"Di chuyển, di cư",f:"migration | migrant | migratory",g:"Nhóm 9"},
+  {w:"Mode",v:"Kiểu, chế độ",f:"modal | modality",g:"Nhóm 9"},
+  {w:"Modify",v:"Điều chỉnh",f:"modification | modifier",g:"Nhóm 9"},
+  {w:"Mutual",v:"Tương hỗ, lẫn nhau",f:"mutually",g:"Nhóm 9"},
+  {w:"Negate",v:"Phủ định",f:"negation | negative | negatively | negativity",g:"Nhóm 9"},
+  {w:"Nevertheless",v:"Tuy nhiên, vẫn",f:"",g:"Nhóm 9"},
+  {w:"Norm",v:"Tiêu chuẩn, quy chuẩn",f:"normal | normalize | normally | abnormal",g:"Nhóm 9"},
+  {w:"Obtain",v:"Đạt được",f:"obtainable | unobtainable",g:"Nhóm 9"},
+  {w:"Obvious",v:"Rõ ràng",f:"obviously | obviousness",g:"Nhóm 9"},
+  {w:"Occupy",v:"Chiếm đóng",f:"occupation | occupant",g:"Nhóm 9"},
+  {w:"Omit",v:"Bỏ qua, không đề cập",f:"omission",g:"Nhóm 9"},
+  {w:"Paradigm",v:"Mô hình, hệ tư tưởng",f:"paradigmatic | paradigmatically",g:"Nhóm 9"},
+  {w:"Paradox",v:"Nghịch lý",f:"paradoxical | paradoxically",g:"Nhóm 9"},
+  {w:"Perceive",v:"Nhận thức, cảm nhận",f:"perception | perceptive | imperceptible",g:"Nhóm 9"},
+  {w:"Persist",v:"Kiên trì, tồn tại",f:"persistence | persistent | persistently",g:"Nhóm 9"},
+  {w:"Perspective",v:"Quan điểm",f:"",g:"Nhóm 9"},
+  {w:"Precede",v:"Đi trước",f:"precedence | precedent | unprecedented",g:"Nhóm 9"},
+  {w:"Precise",v:"Chính xác",f:"precisely | precision | imprecise | imprecisely",g:"Nhóm 9"},
+  {w:"Predict",v:"Dự đoán",f:"prediction | predictable | unpredictable",g:"Nhóm 9"},
+  {w:"Predominant",v:"Chiếm ưu thế",f:"predominantly | predominance | predominate",g:"Nhóm 9"},
+  {w:"Pursue",v:"Theo đuổi",f:"pursuit",g:"Nhóm 9"},
+  {w:"Rational",v:"Hợp lý",f:"rationality | rationally | rationalize | irrational",g:"Nhóm 9"},
+  {w:"Reinforce",v:"Củng cố",f:"reinforcement",g:"Nhóm 9"},
+  {w:"Reject",v:"Từ chối",f:"rejection",g:"Nhóm 9"},
+  {w:"Resolve",v:"Giải quyết",f:"resolution | resolute | resolutely | unresolved",g:"Nhóm 9"},
+  {w:"Retain",v:"Giữ lại",f:"retention | retentive",g:"Nhóm 9"},
+  {w:"Reveal",v:"Tiết lộ",f:"revelation | revealing",g:"Nhóm 9"},
+  {w:"Revise",v:"Xem xét lại",f:"revision | revisionary",g:"Nhóm 9"},
+  {w:"Rigid",v:"Cứng nhắc",f:"rigidity | rigidly",g:"Nhóm 9"},
+  {w:"Scope",v:"Phạm vi, quy mô",f:"",g:"Nhóm 9"},
+  {w:"Simulate",v:"Mô phỏng",f:"simulation | simulator",g:"Nhóm 9"},
+  {w:"Stable",v:"Ổn định",f:"stability | stabilize | unstable",g:"Nhóm 9"},
+  {w:"Subordinate",v:"Cấp dưới",f:"subordination",g:"Nhóm 9"},
+  {w:"Sufficient",v:"Đủ",f:"sufficiency | sufficiently | insufficient",g:"Nhóm 9"},
+  {w:"Summarize",v:"Tóm tắt",f:"summary | summarization",g:"Nhóm 9"},
+  {w:"Sustain",v:"Duy trì, chịu đựng",f:"sustainability | sustainable | unsustainable | sustainably",g:"Nhóm 9"},
+  {w:"Symbol",v:"Ký hiệu, biểu tượng",f:"symbolic | symbolically | symbolize | symbolism",g:"Nhóm 9"},
+  {w:"Target",v:"Mục tiêu",f:"",g:"Nhóm 9"},
+  {w:"Terminate",v:"Chấm dứt",f:"termination | terminal | terminally",g:"Nhóm 9"},
+  {w:"Trigger",v:"Kích hoạt, gây ra",f:"",g:"Nhóm 9"},
+  {w:"Ultimate",v:"Cuối cùng, tột cùng",f:"ultimately",g:"Nhóm 9"},
+  {w:"Underlie",v:"Là cơ sở của",f:"underlying | underpinning",g:"Nhóm 9"},
+  {w:"Valid",v:"Có giá trị, hợp lệ",f:"validity | validate | invalid | invalidate",g:"Nhóm 9"},
+  {w:"Vision",v:"Tầm nhìn, thị giác",f:"visual | visually | visualize | visualization",g:"Nhóm 9"},
+  {w:"Widespread",v:"Rộng rãi, phổ biến",f:"",g:"Nhóm 10"},
+  {w:"Yield",v:"Mang lại, năng suất",f:"",g:"Nhóm 10"},
+  {w:"Abandon",v:"Từ bỏ, rời bỏ",f:"abandonment | abandoned",g:"Nhóm 10"},
+  {w:"Abstract",v:"Tóm tắt, trừu tượng",f:"abstraction | abstractly",g:"Nhóm 10"},
+  {w:"Access",v:"Tiếp cận",f:"accessible | accessibility | inaccessible",g:"Nhóm 10"},
+  {w:"Accommodate",v:"Cung cấp chỗ ở, thích nghi",f:"accommodation | accommodating",g:"Nhóm 10"},
+  {w:"Accumulate",v:"Tích lũy",f:"accumulation | cumulative | cumulatively",g:"Nhóm 10"},
+  {w:"Accurate",v:"Chính xác",f:"accuracy | accurately | inaccuracy | inaccurate",g:"Nhóm 10"},
+  {w:"Adapt",v:"Thích nghi, cải biên",f:"adaptation | adaptable | inadaptable",g:"Nhóm 10"},
+  {w:"Adequate",v:"Đủ, thích hợp",f:"adequacy | adequately | inadequate | inadequacy",g:"Nhóm 10"},
+  {w:"Advocate",v:"Ủng hộ, đề xuất",f:"advocacy | advocate",g:"Nhóm 10"},
+  {w:"Ambiguous",v:"Mơ hồ, không rõ ràng",f:"ambiguity | ambiguously | unambiguous",g:"Nhóm 10"},
+  {w:"Analogous",v:"Tương tự",f:"analogy | analogously",g:"Nhóm 10"},
+  {w:"Cease",v:"Ngừng",f:"ceaseless | ceaselessly",g:"Nhóm 10"},
+  {w:"Coherent",v:"Mạch lạc",f:"coherence | incoherent",g:"Nhóm 10"},
+  {w:"Compatible",v:"Tương thích",f:"compatibility | incompatible",g:"Nhóm 10"},
+  {w:"Complement",v:"Bổ sung, bổ trợ",f:"complementary",g:"Nhóm 10"},
+  {w:"Conceive",v:"Hình thành ý tưởng",f:"conception | inconceivable",g:"Nhóm 10"},
+  {w:"Conform",v:"Tuân thủ, phù hợp",f:"conformity | nonconformity",g:"Nhóm 10"},
+  {w:"Contemporary",v:"Đương đại",f:"contemporarily",g:"Nhóm 10"},
+  {w:"Controversy",v:"Tranh cãi",f:"controversial | controversially",g:"Nhóm 10"},
+  {w:"Currency",v:"Tiền tệ, đồng tiền",f:"current | currently",g:"Nhóm 10"},
+  {w:"Decade",v:"Thập kỷ",f:"decadal",g:"Nhóm 10"},
+  {w:"Denote",v:"Biểu thị",f:"denotation | denotative",g:"Nhóm 10"},
+  {w:"Detect",v:"Phát hiện, nhận ra",f:"detection | detective | detector",g:"Nhóm 10"},
+  {w:"Deviate",v:"Lệch, đi chệch",f:"deviation | deviant",g:"Nhóm 10"},
+  {w:"Diminish",v:"Giảm bớt",f:"diminution | diminishing",g:"Nhóm 10"},
+  {w:"Domain",v:"Lĩnh vực, phạm vi",f:"",g:"Nhóm 10"},
+  {w:"Draft",v:"Soạn thảo",f:"",g:"Nhóm 10"},
+  {w:"Dynamic",v:"Năng động",f:"dynamically | dynamics",g:"Nhóm 10"},
+  {w:"Elite",v:"Tinh hoa, xuất sắc",f:"elitism | elitist",g:"Nhóm 10"},
+  {w:"Evolution",v:"Tiến hóa",f:"evolve | evolutionary",g:"Nhóm 10"},
+  {w:"Extract",v:"Trích xuất",f:"extraction | extractable",g:"Nhóm 10"},
+  {w:"Hierarchy",v:"Hệ thống phân cấp",f:"hierarchical | hierarchically",g:"Nhóm 10"},
+  {w:"Ideology",v:"Ý thức hệ",f:"ideological | ideologically",g:"Nhóm 10"},
+  {w:"Inhibit",v:"Ngăn cản, ức chế",f:"inhibition | uninhibited",g:"Nhóm 10"},
+  {w:"Intrinsic",v:"Vốn có, nội tại",f:"intrinsically",g:"Nhóm 10"},
+  {w:"Invoke",v:"Kêu gọi, viện dẫn",f:"invocation",g:"Nhóm 10"},
+];
+
+
+let customVocab = JSON.parse(localStorage.getItem('custom_vocab')||'[]');
+let VOCAB_ALL = () => [...VOCAB, ...customVocab];
+const GROUPS = [...new Set(VOCAB.map(v=>v.g))];
+
+let state = {
+  tab:'vocab', search:'', filterGroup:'all', filterStatus:'all', page:1,
+  known: JSON.parse(localStorage.getItem('vocab_known')||'{}'),
+  quizHistory: JSON.parse(localStorage.getItem('vocab_quiz_history')||'[]'),
+  fcIndex:0, fcFlipped:false, fcDeck:[],
+  quizState:null, quizAnswered:false, quizSelected:null,
+  gameMode:null,
+  expandedWords:{},
+  addSubTab:'manual',
+  dictState:null,
+  matchState:null,
+};
+
+const PER_PAGE=20;
+function save(){localStorage.setItem('vocab_known',JSON.stringify(state.known));localStorage.setItem('vocab_quiz_history',JSON.stringify(state.quizHistory));localStorage.setItem('custom_vocab',JSON.stringify(customVocab));}
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+
+function speak(word,e){
+  if(e){e.stopPropagation();e.preventDefault();}
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(word);
+  u.lang='en-US';u.rate=0.85;u.pitch=1;
+  window.speechSynthesis.speak(u);
+}
+
+function getFiltered(){
+  let v=VOCAB_ALL();
+  if(state.search){const q=state.search.toLowerCase();v=v.filter(x=>x.w.toLowerCase().includes(q)||x.v.toLowerCase().includes(q)||(x.f||'').toLowerCase().includes(q));}
+  if(state.filterGroup!=='all')v=v.filter(x=>x.g===state.filterGroup);
+  if(state.filterStatus==='known')v=v.filter(x=>state.known[x.w]);
+  if(state.filterStatus==='unknown')v=v.filter(x=>!state.known[x.w]);
+  return v;
+}
+
+function toast(msg,success=false){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast show'+(success?' success':'');
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>t.className='toast',2200);
+}
+
+function updateStats(){
+  const va=VOCAB_ALL();
+  const known=Object.values(state.known).filter(Boolean).length;
+  const pct=Math.round(known/va.length*100);
+  document.getElementById('statsBar').innerHTML=`
+    <div class="stat-pill">📚 <span>${va.length}</span> từ</div>
+    <div class="stat-pill">✅ <span>${known}</span> đã thuộc</div>
+    <div class="stat-pill">🎯 <span>${pct}%</span> tiến độ</div>
+    <div class="stat-pill">📝 <span>${state.quizHistory.length}</span> quiz</div>
+  `;
+}
+
+function openWordModal(word){
+  const item=VOCAB_ALL().find(v=>v.w===word);
+  if(!item)return;
+  const families=item.f?item.f.split('|').map(s=>s.trim()).filter(Boolean):[];
+  document.getElementById('modalArea').innerHTML=`
+    <div class="modal-overlay" onclick="closeModal(event)">
+      <div class="modal-box" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <div class="modal-word">
+          ${item.w}
+          <button class="fc-speak" onclick="speak('${item.w}',event)" title="Nghe phát âm">🔊</button>
+        </div>
+        <div class="modal-vi">${item.v}</div>
+        <span class="modal-group">${item.g}</span>
+        ${families.length?`
+          <div class="modal-section-title">📝 Gia đình từ</div>
+          <div class="modal-family-grid">
+            ${families.map(f=>`
+              <div class="modal-family-item" onclick="speak('${f.replace(/'/g,"\\'")}',event)">
+                ${f} <span>🔊</span>
+              </div>`).join('')}
+          </div>`:''}
+        <div style="display:flex;gap:8px;margin-top:1.2rem;flex-wrap:wrap">
+          <button class="btn btn-green btn-sm" onclick="markFromModal('${item.w}',true)">✅ Đã thuộc</button>
+          <button class="btn btn-outline btn-sm" onclick="markFromModal('${item.w}',false)">📖 Chưa thuộc</button>
+        </div>
+      </div>
+    </div>`;
+}
+function closeModal(e){if(!e||e.target===e.currentTarget)document.getElementById('modalArea').innerHTML='';}
+function markFromModal(word,known){state.known[word]=known;save();updateStats();toast(known?'✅ Đã thuộc!':'🔄 Bỏ đánh dấu',known);}
+
+// ============ VOCAB TAB ============
+function renderVocab(){
+  const filtered=getFiltered();
+  const total=filtered.length;
+  const totalPages=Math.ceil(total/PER_PAGE)||1;
+  if(state.page>totalPages)state.page=1;
+  const start=(state.page-1)*PER_PAGE;
+  const items=filtered.slice(start,start+PER_PAGE);
+  const allGroups=[...new Set(VOCAB_ALL().map(v=>v.g))];
+
+  let html=`
+    <div class="controls">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Tìm từ vựng..." value="${state.search}" oninput="state.search=this.value;state.page=1;renderVocab()">
+      </div>
+      <select onchange="state.filterGroup=this.value;state.page=1;renderVocab()">
+        <option value="all" ${state.filterGroup==='all'?'selected':''}>Tất cả nhóm</option>
+        ${allGroups.map(g=>`<option value="${g}" ${state.filterGroup===g?'selected':''}>${g}</option>`).join('')}
+      </select>
+      <select onchange="state.filterStatus=this.value;state.page=1;renderVocab()">
+        <option value="all" ${state.filterStatus==='all'?'selected':''}>Tất cả</option>
+        <option value="unknown" ${state.filterStatus==='unknown'?'selected':''}>Chưa thuộc</option>
+        <option value="known" ${state.filterStatus==='known'?'selected':''}>Đã thuộc</option>
+      </select>
+    </div>
+    <div style="font-size:.82rem;color:var(--text2);font-weight:600;margin-bottom:.8rem">Hiển thị ${start+1}–${Math.min(start+PER_PAGE,total)} / ${total} từ · Nhấn từ để xem chi tiết</div>
+    <div class="vocab-grid">`;
+
+  items.forEach((item,i)=>{
+    const isKnown=!!state.known[item.w];
+    const families=item.f?item.f.split('|').map(s=>s.trim()).filter(Boolean):[];
+    const expanded=!!state.expandedWords[item.w];
+    const wEsc=item.w.replace(/'/g,"\\'");
+    html+=`
+      <div class="vocab-card ${isKnown?'known':''}">
+        <div class="vocab-card-header" onclick="toggleExpand('${wEsc}')">
+          <div class="word-num">${start+i+1}</div>
+          <div class="word-main">
+            <div class="word-en">
+              ${item.w}
+              <button class="speak-btn" onclick="speak('${wEsc}',event)" title="Nghe phát âm">🔊</button>
+            </div>
+            <div class="word-vi">${item.v}</div>
+          </div>
+          <span class="group-badge">${item.g}</span>
+          <button class="known-btn ${isKnown?'active':''}" onclick="event.stopPropagation();toggleKnown('${wEsc}')">${isKnown?'✓ Thuộc':'+ Thuộc'}</button>
+          <button class="expand-btn" title="Xem chi tiết">${expanded?'▲':'▼'}</button>
+        </div>
+        <div class="vocab-detail ${expanded?'open':''}">
+          ${families.length?`
+            <div class="family-section">
+              <div class="family-label">📝 Gia đình từ</div>
+              <div class="family-words">
+                ${families.map(f=>{const sid='fm_'+f.replace(/[^a-zA-Z0-9]/g,'_');return `<div class="family-tag"><div class="family-tag-row"><button class="speak-mini" onclick="speak('${f.replace(/'/g,"\\'")}',event)">🔊</button><span class="family-tag-word">${f}</span></div><div class="family-tag-meaning" id="${sid}"><span style="opacity:.4;font-size:.7rem">đang tra...</span></div></div>`;}).join('')}
+              </div>
+            </div>`:'<div style="color:var(--text2);font-size:.85rem">Không có gia đình từ</div>'}
+          <div style="margin-top:.8rem;display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn btn-outline btn-sm" onclick="openWordModal('${wEsc}')">📖 Chi tiết</button>
+          </div>
+        </div>
+      </div>`;
+  });
+  html+='</div>';
+
+  if(totalPages>1){
+    html+='<div class="pagination">';
+    if(state.page>1)html+=`<button class="page-btn" onclick="state.page=${state.page-1};renderVocab()">‹</button>`;
+    const s2=Math.max(1,state.page-2),e2=Math.min(totalPages,state.page+2);
+    if(s2>1)html+=`<button class="page-btn" onclick="state.page=1;renderVocab()">1</button>`;
+    if(s2>2)html+=`<span class="page-info">…</span>`;
+    for(let p=s2;p<=e2;p++)html+=`<button class="page-btn ${p===state.page?'active':''}" onclick="state.page=${p};renderVocab()">${p}</button>`;
+    if(e2<totalPages-1)html+=`<span class="page-info">…</span>`;
+    if(e2<totalPages)html+=`<button class="page-btn" onclick="state.page=${totalPages};renderVocab()">${totalPages}</button>`;
+    if(state.page<totalPages)html+=`<button class="page-btn" onclick="state.page=${state.page+1};renderVocab()">›</button>`;
+    html+='</div>';
+  }
+  document.getElementById('tabContent').innerHTML=html;
+}
+
+const meaningCache={};
+
+async function lookupMeaning(word){
+  const key=word.toLowerCase().trim();
+  if(meaningCache[key]!==undefined)return meaningCache[key];
+  meaningCache[key]='';
+  try{
+    const r=await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/'+encodeURIComponent(key));
+    if(!r.ok){meaningCache[key]='';return '';}
+    const d=await r.json();
+    if(d&&d[0]&&d[0].meanings&&d[0].meanings[0]&&d[0].meanings[0].definitions&&d[0].meanings[0].definitions[0]){
+      const pos=d[0].meanings[0].partOfSpeech||'';
+      const def=d[0].meanings[0].definitions[0].definition||'';
+      meaningCache[key]=`(${pos}) ${def}`.slice(0,80)+(def.length>80?'…':'');
+    }
+  }catch(e){meaningCache[key]='';}
+  return meaningCache[key];
+}
+
+async function loadFamilyMeanings(families){
+  for(const f of families){
+    const sid='fm_'+f.replace(/[^a-zA-Z0-9]/g,'_');
+    const el=document.getElementById(sid);
+    if(!el)continue;
+    const meaning=await lookupMeaning(f.split(' ')[0]);
+    if(el){
+      if(meaning){el.innerHTML=`<span style="color:var(--text2)">${meaning}</span>`;}
+      else{el.innerHTML='';}
+    }
+  }
+}
+
+function toggleExpand(word){
+  state.expandedWords[word]=!state.expandedWords[word];
+  renderVocab();
+  if(state.expandedWords[word]){
+    const item=VOCAB_ALL().find(v=>v.w===word);
+    if(item&&item.f){
+      const families=item.f.split('|').map(s=>s.trim()).filter(Boolean);
+      if(families.length)loadFamilyMeanings(families);
+    }
+  }
+}
+function toggleKnown(word){
+  state.known[word]=!state.known[word];
+  save();updateStats();renderVocab();
+  toast(state.known[word]?'✅ Đã thuộc!':'🔄 Bỏ đánh dấu',state.known[word]);
+}
+
+// ============ FLASHCARD TAB ============
+function renderFlashcard(){
+  if(!state.fcDeck.length)state.fcDeck=shuffle(VOCAB_ALL());
+  const item=state.fcDeck[state.fcIndex];
+  const pct=Math.round((state.fcIndex+1)/state.fcDeck.length*100);
+  const families=item.f?item.f.split('|').map(s=>s.trim()).filter(Boolean):[];
+  const isKnown=!!state.known[item.w];
+  const allGroups=[...new Set(VOCAB_ALL().map(v=>v.g))];
+
+  document.getElementById('tabContent').innerHTML=`
+    <div class="flashcard-wrap">
+      <div class="fc-controls">
+        <button class="btn btn-outline btn-sm" onclick="fcFilter('all')">Tất cả (${VOCAB_ALL().length})</button>
+        <button class="btn btn-outline btn-sm" onclick="fcFilter('unknown')">Chưa thuộc</button>
+        <button class="btn btn-outline btn-sm" onclick="fcFilter('known')">Đã thuộc</button>
+        <select onchange="fcFilterGroup(this.value)" style="border-radius:50px;border:1.5px solid var(--border);font-size:.83rem;padding:.32rem .8rem">
+          <option value="all">Tất cả nhóm</option>
+          ${allGroups.map(g=>`<option value="${g}">${g}</option>`).join('')}
+        </select>
+        <button class="btn btn-yellow btn-sm" onclick="shuffleDeck()">🔀 Xáo bài</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:1rem;width:100%;max-width:600px">
+        <span class="fc-counter">${state.fcIndex+1}/${state.fcDeck.length}</span>
+        <div class="fc-progress" style="flex:1"><div class="fc-bar" style="width:${pct}%"></div></div>
+        <span class="fc-counter">${pct}%</span>
+      </div>
+      <div class="flashcard" onclick="flipCard()">
+        <div class="fc-inner ${state.fcFlipped?'flipped':''}">
+          <div class="fc-face fc-front">
+            <div class="fc-hint">👆 Nhấn để lật · Nhấn 🔊 để nghe</div>
+            <div class="fc-word">
+              ${item.w}
+              <button class="fc-speak" onclick="speak('${item.w.replace(/'/g,"\\'")}',event)" title="Nghe">🔊</button>
+            </div>
+            <div class="fc-group">${item.g}</div>
+            <div style="margin-top:.8rem;font-size:.83rem;color:var(--text2)">${isKnown?'✅ Đã thuộc':'📖 Chưa thuộc'}</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-hint">💡 Nghĩa tiếng Việt</div>
+            <div class="fc-meaning">${item.v}</div>
+            ${families.length?`
+              <div class="fc-family-list">
+                <div style="font-size:.73rem;font-weight:700;color:var(--text2);margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.5px">Gia đình từ</div>
+                ${families.map(f=>`<span style="display:inline-block;background:var(--yellow-light);border-radius:20px;padding:.1rem .5rem;margin:.1rem;font-size:.78rem;font-weight:600;color:var(--yellow-deep);cursor:pointer" onclick="speak('${f.replace(/'/g,"\\'")}',event)">🔊 ${f}</span>`).join('')}
+              </div>`:''}
+          </div>
+        </div>
+      </div>
+      <div class="fc-nav">
+        <button class="btn btn-outline" onclick="fcNav(-1)">◀ Trước</button>
+        <button class="btn btn-pink" onclick="fcNav(1)">Tiếp ▶</button>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+        <button class="btn btn-green btn-sm" onclick="fcMark(true)">✅ Thuộc rồi</button>
+        <button class="btn btn-outline btn-sm" onclick="fcMark(false)">❌ Chưa thuộc</button>
+      </div>
+    </div>`;
+}
+function flipCard(){state.fcFlipped=!state.fcFlipped;renderFlashcard();}
+function fcNav(dir){state.fcFlipped=false;state.fcIndex=(state.fcIndex+dir+state.fcDeck.length)%state.fcDeck.length;renderFlashcard();}
+function fcMark(known){const w=state.fcDeck[state.fcIndex].w;state.known[w]=known;save();updateStats();toast(known?'✅ Thuộc!':'🔄 Tiếp tục học',known);fcNav(1);}
+function shuffleDeck(){state.fcDeck=shuffle(state.fcDeck);state.fcIndex=0;state.fcFlipped=false;renderFlashcard();toast('🔀 Đã xáo bài!');}
+function fcFilter(f){
+  const va=VOCAB_ALL();
+  if(f==='all')state.fcDeck=shuffle(va);
+  else if(f==='unknown')state.fcDeck=shuffle(va.filter(v=>!state.known[v.w]));
+  else state.fcDeck=shuffle(va.filter(v=>state.known[v.w]));
+  state.fcIndex=0;state.fcFlipped=false;renderFlashcard();toast(`🃏 ${state.fcDeck.length} từ`);
+}
+function fcFilterGroup(g){
+  const va=VOCAB_ALL();
+  state.fcDeck=shuffle(g==='all'?va:va.filter(v=>v.g===g));
+  state.fcIndex=0;state.fcFlipped=false;renderFlashcard();toast(`🃏 ${state.fcDeck.length} từ`);
+}
+
+// ============ QUIZ TAB ============
+function renderQuiz(){
+  if(!state.quizState){
+    const allGroups=[...new Set(VOCAB_ALL().map(v=>v.g))];
+    document.getElementById('tabContent').innerHTML=`
+      <div class="quiz-wrap">
+        <div style="background:white;border-radius:20px;border:2px solid var(--border);padding:1.5rem;text-align:center;margin-bottom:1rem">
+          <div style="font-size:2.5rem;margin-bottom:.5rem">⚡</div>
+          <h2 style="margin-bottom:.3rem">Chọn mode quiz</h2>
+          <p style="color:var(--text2);font-size:.88rem;margin-bottom:1.2rem">Kiểm tra kiến thức của mày nào!</p>
+          <div class="quiz-mode-grid">
+            <div class="mode-card" onclick="startQuiz('all',20)"><div class="icon">🎯</div><div class="title">20 câu nhanh</div><div class="desc">Ngẫu nhiên tất cả từ</div></div>
+            <div class="mode-card" onclick="startQuiz('unknown',15)"><div class="icon">📚</div><div class="title">Ôn từ chưa thuộc</div><div class="desc">15 câu từ chưa học</div></div>
+            <div class="mode-card" onclick="startQuiz('all',50)"><div class="icon">🔥</div><div class="title">50 câu marathon</div><div class="desc">Thử thách cực đại</div></div>
+          </div>
+          <div style="margin-top:.8rem;display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
+            ${allGroups.map(g=>`<button class="btn btn-outline btn-sm" onclick="startQuiz('${g}',15)">${g}</button>`).join('')}
+          </div>
+        </div>
+        ${state.quizHistory.length?`
+          <h3 style="margin-bottom:.8rem">📋 Lịch sử gần đây</h3>
+          <div class="history-list">
+            ${state.quizHistory.slice(-5).reverse().map(h=>`
+              <div class="history-item">
+                <div>${h.score}/${h.total} đúng <span style="font-weight:700;color:${h.score/h.total>=.7?'var(--green)':'var(--orange)'}"> ${Math.round(h.score/h.total*100)}%</span></div>
+                <div class="ts">${h.time}</div>
+              </div>`).join('')}
+          </div>`:''}
+      </div>`;
+    return;
+  }
+  const {questions,current,done}=state.quizState;
+  if(done){
+    const correct=state.quizState.correctCount;
+    const total=questions.length;
+    const pct=Math.round(correct/total*100);
+    const emoji=pct>=90?'🏆':pct>=70?'😊':pct>=50?'😅':'💪';
+    document.getElementById('tabContent').innerHTML=`
+      <div class="quiz-wrap">
+        <div class="quiz-finish">
+          <div style="font-size:4rem">${emoji}</div>
+          <div class="quiz-big">${pct}%</div>
+          <p style="font-size:1.1rem;color:var(--text2);margin:.5rem 0">${correct}/${total} câu đúng</p>
+          <p style="font-size:.88rem;color:var(--text2);margin-bottom:1.2rem">${pct>=70?'Làm tốt lắm! 🌸':'Cố lên nhé! 📚'}</p>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+            <button class="btn btn-pink" onclick="state.quizState=null;renderQuiz()">🎯 Quiz mới</button>
+            <button class="btn btn-outline" onclick="reviewWrong()">❌ Xem lại sai</button>
+          </div>
+        </div>
+      </div>`;
+    return;
+  }
+  const q=questions[current];
+  const progress=Math.round((current/questions.length)*100);
+  document.getElementById('tabContent').innerHTML=`
+    <div class="quiz-wrap">
+      <div class="quiz-header">
+        <div class="fc-progress" style="flex:1"><div class="fc-bar" style="width:${progress}%"></div></div>
+        <div class="quiz-score-pill">✅ ${state.quizState.correctCount||0}/${questions.length}</div>
+      </div>
+      <div style="font-size:.8rem;color:var(--text2);font-weight:600;margin-bottom:.5rem">Câu ${current+1}/${questions.length}</div>
+      <div class="quiz-q">
+        <div class="qlabel">${q.type==='en2vi'?'🇺🇸 Nghĩa tiếng Việt của từ này?':'🇻🇳 Từ tiếng Anh nào có nghĩa sau?'}</div>
+        <div class="question" style="display:flex;align-items:center;justify-content:center;gap:10px">
+          ${q.type==='en2vi'?q.word:q.meaning}
+          ${q.type==='en2vi'?`<button class="fc-speak" onclick="speak('${q.word.replace(/'/g,"\\'")}',event)">🔊</button>`:''}
+        </div>
+      </div>
+      <div class="quiz-options">
+        ${q.options.map((opt,idx)=>{
+          let cls='quiz-opt';
+          if(state.quizAnswered){if(opt===q.answer)cls+=' correct';else if(opt===state.quizSelected)cls+=' wrong';}
+          return `<button class="${cls}" onclick="answerQuiz('${opt.replace(/'/g,"\\'")}')" ${state.quizAnswered?'disabled':''}>${opt}</button>`;
+        }).join('')}
+      </div>
+      <div class="quiz-feedback ${state.quizAnswered?(state.quizSelected===q.answer?'correct':'wrong'):''}">
+        ${state.quizAnswered?(state.quizSelected===q.answer?'🎉 Đúng rồi!':'❌ Sai! Đáp án: '+q.answer):''}
+      </div>
+      ${state.quizAnswered?`<div style="text-align:center"><button class="btn btn-pink" onclick="nextQuestion()">Tiếp theo ▶</button></div>`:''}
+    </div>`;
+}
+
+function startQuiz(mode,count){
+  const va=VOCAB_ALL();
+  let pool;
+  if(mode==='all')pool=shuffle(va);
+  else if(mode==='unknown')pool=shuffle(va.filter(v=>!state.known[v.w]));
+  else pool=shuffle(va.filter(v=>v.g===mode));
+  if(!pool.length){toast('Không có từ nào!');return;}
+  pool=pool.slice(0,count);
+  const questions=pool.map(item=>{
+    const type=Math.random()>.5?'en2vi':'vi2en';
+    const wrongPool=va.filter(v=>v.w!==item.w);
+    const wrongs=shuffle(wrongPool).slice(0,3).map(v=>type==='en2vi'?v.v:v.w);
+    const answer=type==='en2vi'?item.v:item.w;
+    return {word:item.w,meaning:item.v,group:item.g,type,answer,options:shuffle([answer,...wrongs])};
+  });
+  state.quizState={questions,current:0,answers:[],done:false,correctCount:0};
+  state.quizAnswered=false;state.quizSelected=null;
+  renderQuiz();
+}
+function answerQuiz(opt){
+  if(state.quizAnswered)return;
+  state.quizAnswered=true;state.quizSelected=opt;
+  const q=state.quizState.questions[state.quizState.current];
+  if(opt===q.answer)state.quizState.correctCount=(state.quizState.correctCount||0)+1;
+  state.quizState.answers.push({question:q,selected:opt,correct:opt===q.answer});
+  renderQuiz();
+}
+function nextQuestion(){
+  state.quizState.current++;state.quizAnswered=false;state.quizSelected=null;
+  if(state.quizState.current>=state.quizState.questions.length){
+    state.quizState.done=true;
+    const h={score:state.quizState.correctCount,total:state.quizState.questions.length,time:new Date().toLocaleString('vi')};
+    state.quizHistory.push(h);if(state.quizHistory.length>20)state.quizHistory=state.quizHistory.slice(-20);
+    save();updateStats();
+  }
+  renderQuiz();
+}
+function reviewWrong(){
+  const wrong=state.quizState.answers.filter(a=>!a.correct);
+  if(!wrong.length){toast('Không có câu sai! 🎉',true);return;}
+  const va=VOCAB_ALL();
+  const questions=wrong.map(a=>{
+    const q=a.question;
+    const wrongPool=va.filter(v=>v.w!==q.word);
+    const wrongs=shuffle(wrongPool).slice(0,3).map(v=>q.type==='en2vi'?v.v:v.w);
+    return {...q,options:shuffle([q.answer,...wrongs])};
+  });
+  state.quizState={questions,current:0,answers:[],done:false,correctCount:0};
+  state.quizAnswered=false;state.quizSelected=null;
+  toast(`📝 Ôn ${questions.length} câu sai`);renderQuiz();
+}
+
+// ============ GAME TAB ============
+function renderGame(){
+  if(!state.gameMode){
+    document.getElementById('tabContent').innerHTML=`
+      <div style="max-width:700px;margin:0 auto">
+        <div style="text-align:center;padding:1.5rem;background:white;border-radius:20px;border:2px solid var(--border);margin-bottom:1rem">
+          <div style="font-size:2.5rem;margin-bottom:.5rem">🎮</div>
+          <h2 style="margin-bottom:.3rem">Trò chơi từ vựng</h2>
+          <p style="color:var(--text2);font-size:.88rem">Chọn trò chơi để bắt đầu!</p>
+        </div>
+        <div class="quiz-mode-grid">
+          <div class="mode-card" onclick="state.gameMode='dictation';renderGame()">
+            <div class="icon">✍️</div>
+            <div class="title">Chính tả</div>
+            <div class="desc">Nghe phát âm → gõ lại đúng từ. Rèn spelling cực đỉnh!</div>
+          </div>
+          <div class="mode-card" onclick="state.gameMode='match';renderGame()">
+            <div class="icon">🔗</div>
+            <div class="title">Ghép từ</div>
+            <div class="desc">Nối tiếng Anh với nghĩa tiếng Việt. Đua với thời gian!</div>
+          </div>
+        </div>
+      </div>`;
+    return;
+  }
+  if(state.gameMode==='dictation')renderDictation();
+  else if(state.gameMode==='match')renderMatch();
+}
+
+// --- DICTATION ---
+function startDictation(mode){
+  const va=VOCAB_ALL();
+  let pool;
+  if(mode==='all')pool=shuffle(va);
+  else pool=shuffle(va.filter(v=>!state.known[v.w]));
+  pool=pool.slice(0,15);
+  state.dictState={pool,index:0,score:0,lives:3,answered:false,showHint:false};
+  renderDictation();
+}
+function renderDictation(){
+  if(!state.dictState){
+    document.getElementById('tabContent').innerHTML=`
+      <div class="dictation-wrap">
+        <div style="text-align:center;padding:1.5rem;background:white;border-radius:20px;border:2px solid var(--border);margin-bottom:1rem">
+          <div style="font-size:2.5rem;margin-bottom:.5rem">✍️</div>
+          <h2 style="margin-bottom:.3rem">Chính tả</h2>
+          <p style="color:var(--text2);font-size:.88rem;margin-bottom:1rem">Nghe phát âm → gõ lại từ tiếng Anh</p>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+            <button class="btn btn-pink" onclick="startDictation('all')">🎯 15 từ ngẫu nhiên</button>
+            <button class="btn btn-outline" onclick="startDictation('unknown')">📖 Từ chưa thuộc</button>
+          </div>
+        </div>
+        <div style="text-align:center"><button class="btn btn-outline" onclick="state.gameMode=null;renderGame()">← Quay lại</button></div>
+      </div>`;
+    return;
+  }
+  const ds=state.dictState;
+  if(ds.index>=ds.pool.length||ds.lives<=0){
+    const total=ds.pool.length>ds.index?ds.index:ds.pool.length;
+    document.getElementById('tabContent').innerHTML=`
+      <div class="dictation-wrap">
+        <div class="quiz-finish">
+          <div style="font-size:3.5rem">${ds.lives<=0?'💔':'🎉'}</div>
+          <div class="quiz-big">${ds.score}/${Math.min(ds.index,ds.pool.length)}</div>
+          <p style="color:var(--text2);margin:.5rem 0 1rem">${ds.lives<=0?'Hết mạng rồi!':'Hoàn thành!'} Điểm: ${ds.score}</p>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+            <button class="btn btn-pink" onclick="state.dictState=null;renderDictation()">🔄 Chơi lại</button>
+            <button class="btn btn-outline" onclick="state.gameMode=null;state.dictState=null;renderGame()">← Chọn game</button>
+          </div>
+        </div>
+      </div>`;
+    return;
+  }
+  const item=ds.pool[ds.index];
+  const blanks=item.w.split('').map(c=>c===' '?'&nbsp;&nbsp;':'_').join(' ');
+  const hearts='❤️'.repeat(ds.lives)+'🖤'.repeat(3-ds.lives);
+  document.getElementById('tabContent').innerHTML=`
+    <div class="dictation-wrap">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:8px">
+        <button class="btn btn-outline btn-sm" onclick="state.gameMode=null;state.dictState=null;renderGame()">← Quay lại</button>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <span class="quiz-score-pill">❤️ ${hearts}</span>
+          <span class="quiz-score-pill">⭐ ${ds.score} điểm</span>
+          <span class="quiz-score-pill">📍 ${ds.index+1}/${ds.pool.length}</span>
+        </div>
+      </div>
+      <div class="dict-word-display">
+        <div class="dict-hint">Nghe và gõ lại từ tiếng Anh</div>
+        <div class="dict-blanks">${ds.answered?item.w:blanks}</div>
+        <div class="dict-meaning">${item.v}</div>
+        <div class="dict-group">${item.g}</div>
+        ${ds.showHint?`<div class="hint-letters" style="margin-top:.8rem">${item.w.toUpperCase().split('').map(c=>`<span class="hint-letter">${c}</span>`).join('')}</div>`:''}
+      </div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:1rem">
+        <button class="btn btn-pink" onclick="speakDictWord()">🔊 Nghe từ</button>
+        ${!ds.answered&&!ds.showHint?`<button class="btn btn-outline btn-sm" onclick="showDictHint()">💡 Gợi ý chữ cái</button>`:''}
+      </div>
+      ${!ds.answered?`
+        <div class="dict-input-row">
+          <input type="text" class="dict-input" id="dictInput" placeholder="Gõ từ tiếng Anh..." autocomplete="off" autocorrect="off" spellcheck="false"
+            onkeydown="if(event.key==='Enter')checkDictation()">
+          <button class="btn btn-pink" onclick="checkDictation()">✓ Kiểm tra</button>
+        </div>
+        <div class="dict-feedback" id="dictFeedback"></div>`:`
+        <div style="text-align:center">
+          <button class="btn btn-pink" onclick="nextDictWord()">Từ tiếp theo ▶</button>
+        </div>`}
+    </div>`;
+  if(!ds.answered)setTimeout(()=>{const el=document.getElementById('dictInput');if(el)el.focus();},100);
+}
+function speakDictWord(){if(state.dictState)speak(state.dictState.pool[state.dictState.index].w);}
+function showDictHint(){if(state.dictState){state.dictState.showHint=true;renderDictation();}}
+function checkDictation(){
+  const inp=document.getElementById('dictInput');if(!inp)return;
+  const answer=inp.value.trim();
+  const correct=state.dictState.pool[state.dictState.index];
+  const isCorrect=answer.toLowerCase()===correct.w.toLowerCase();
+  const fb=document.getElementById('dictFeedback');
+  if(isCorrect){
+    inp.classList.add('correct-input');
+    if(fb){fb.textContent='🎉 Đúng rồi! +10 điểm';fb.className='dict-feedback ok';}
+    state.dictState.score+=state.dictState.showHint?5:10;
+    state.dictState.answered=true;
+    setTimeout(()=>renderDictation(),900);
+  } else {
+    inp.classList.add('wrong-input');
+    if(fb){fb.textContent='❌ Sai! Thử lại…';fb.className='dict-feedback bad';}
+    state.dictState.lives--;
+    if(state.dictState.lives<=0){state.dictState.answered=true;setTimeout(()=>renderDictation(),800);}
+    else{setTimeout(()=>{inp.classList.remove('wrong-input');inp.value='';if(fb)fb.textContent='';},600);}
+  }
+}
+function nextDictWord(){if(state.dictState){state.dictState.index++;state.dictState.answered=false;state.dictState.showHint=false;renderDictation();}}
+
+// --- MATCH GAME ---
+function startMatch(){
+  const va=VOCAB_ALL();
+  const pool=shuffle(va).slice(0,6);
+  const eng=shuffle(pool.map(v=>({id:v.w,text:v.w,type:'en'})));
+  const viet=shuffle(pool.map(v=>({id:v.w,text:v.v,type:'vi'})));
+  state.matchState={pool,eng,viet,selected:null,matched:[],errors:0,startTime:Date.now(),done:false};
+  renderMatch();
+}
+function renderMatch(){
+  if(!state.matchState){
+    document.getElementById('tabContent').innerHTML=`
+      <div class="match-wrap">
+        <div style="text-align:center;padding:1.5rem;background:white;border-radius:20px;border:2px solid var(--border);margin-bottom:1rem">
+          <div style="font-size:2.5rem;margin-bottom:.5rem">🔗</div>
+          <h2 style="margin-bottom:.3rem">Ghép từ</h2>
+          <p style="color:var(--text2);font-size:.88rem;margin-bottom:1rem">Chọn từ tiếng Anh → chọn nghĩa tương ứng. Ghép hết 6 cặp nhanh nhất có thể!</p>
+          <button class="btn btn-pink" onclick="startMatch()">🚀 Bắt đầu</button>
+        </div>
+        <div style="text-align:center"><button class="btn btn-outline" onclick="state.gameMode=null;renderGame()">← Quay lại</button></div>
+      </div>`;
+    return;
+  }
+  const ms=state.matchState;
+  if(ms.done){
+    const elapsed=Math.round((Date.now()-ms.startTime)/1000);
+    document.getElementById('tabContent').innerHTML=`
+      <div class="match-wrap">
+        <div class="quiz-finish">
+          <div style="font-size:3.5rem">🏅</div>
+          <div class="quiz-big">${elapsed}s</div>
+          <p style="color:var(--text2);margin:.5rem 0">Ghép xong! Lỗi: ${ms.errors} lần</p>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:1rem">
+            <button class="btn btn-pink" onclick="startMatch()">🔄 Chơi lại (6 từ mới)</button>
+            <button class="btn btn-outline" onclick="state.gameMode=null;state.matchState=null;renderGame()">← Chọn game</button>
+          </div>
+        </div>
+      </div>`;
+    return;
+  }
+  const elapsed=Math.round((Date.now()-ms.startTime)/1000);
+  document.getElementById('tabContent').innerHTML=`
+    <div class="match-wrap">
+      <div class="match-header">
+        <button class="btn btn-outline btn-sm" onclick="state.gameMode=null;state.matchState=null;renderGame()">← Quay lại</button>
+        <div class="match-timer">⏱ ${elapsed}s</div>
+        <div class="match-score">✅ ${ms.matched.length/2}/6 · ❌ ${ms.errors}</div>
+      </div>
+      <p style="text-align:center;font-size:.85rem;color:var(--text2);margin-bottom:.8rem">Chọn từ tiếng Anh rồi chọn nghĩa tương ứng 🔗</p>
+      <div class="match-grid">
+        <div class="match-col">
+          ${ms.eng.map(c=>`
+            <div class="match-card ${ms.matched.includes(c.id)?'matched':''} ${ms.selected&&ms.selected.id===c.id&&ms.selected.type==='en'?'selected':''} ${c._wrongFlash?'wrong-flash':''}"
+              onclick="selectMatchCard('${c.id}','en')">${c.text}
+              <button style="background:none;border:none;cursor:pointer;font-size:.9rem;margin-left:4px" onclick="event.stopPropagation();speak('${c.id.replace(/'/g,"\\'")}',event)">🔊</button>
+            </div>`).join('')}
+        </div>
+        <div class="match-col">
+          ${ms.viet.map(c=>`
+            <div class="match-card ${ms.matched.includes(c.id)?'matched':''} ${ms.selected&&ms.selected.id===c.id&&ms.selected.type==='vi'?'selected':''} ${c._wrongFlash?'wrong-flash':''}"
+              onclick="selectMatchCard('${c.id}','vi')">${c.text}
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  setTimeout(()=>{const t=Math.round((Date.now()-ms.startTime)/1000);const el=document.querySelector('.match-timer');if(el)el.textContent=`⏱ ${t}s`;},1000);
+}
+function selectMatchCard(id,type){
+  const ms=state.matchState;if(!ms)return;
+  if(ms.matched.includes(id))return;
+  const prev=ms.selected;
+  if(!prev){ms.selected={id,type};renderMatch();return;}
+  if(prev.type===type){ms.selected={id,type};renderMatch();return;}
+  if(prev.id===id){
+    ms.matched.push(id);ms.selected=null;
+    speak(id);
+    if(ms.matched.length>=6){setTimeout(()=>{ms.done=true;renderMatch();},400);}
+    else renderMatch();
+  } else {
+    ms.errors++;
+    const prevArr=prev.type==='en'?ms.eng:ms.viet;
+    const currArr=type==='en'?ms.eng:ms.viet;
+    const prevCard=prevArr.find(c=>c.id===prev.id);
+    const currCard=currArr.find(c=>c.id===id);
+    if(prevCard)prevCard._wrongFlash=true;
+    if(currCard)currCard._wrongFlash=true;
+    ms.selected=null;
+    renderMatch();
+    setTimeout(()=>{
+      if(prevCard)delete prevCard._wrongFlash;
+      if(currCard)delete currCard._wrongFlash;
+      renderMatch();
+    },500);
+  }
+}
+
+// ============ ADD VOCAB TAB ============
+function renderAddVocab(){
+  const allGroups=[...new Set(VOCAB_ALL().map(v=>v.g))];
+  document.getElementById('tabContent').innerHTML=`
+    <div class="addvocab-wrap">
+      <h2 style="margin-bottom:1rem">➕ Thêm từ vựng mới</h2>
+      <div class="add-tabs">
+        <button class="add-tab ${state.addSubTab==='manual'?'active':''}" onclick="state.addSubTab='manual';renderAddVocab()">✏️ Gõ thủ công</button>
+        <button class="add-tab ${state.addSubTab==='upload'?'active':''}" onclick="state.addSubTab='upload';renderAddVocab()">📤 Upload Excel</button>
+        <button class="add-tab ${state.addSubTab==='list'?'active':''}" onclick="state.addSubTab='list';renderAddVocab()">📋 Từ đã thêm (${customVocab.length})</button>
+      </div>
+
+      ${state.addSubTab==='manual'?`
+        <div style="background:white;border-radius:var(--radius);border:1.5px solid var(--border);padding:1.2rem;margin-bottom:1rem">
+          <h3 style="margin-bottom:1rem;font-size:1rem">Nhập từ mới</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Từ tiếng Anh *</label>
+              <input class="form-input" id="newWord" placeholder="vd: Abundant" oninput="this.value=this.value.charAt(0).toUpperCase()+this.value.slice(1)">
+            </div>
+            <div class="form-group">
+              <label>Nghĩa tiếng Việt *</label>
+              <input class="form-input" id="newViet" placeholder="vd: Phong phú, dồi dào">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Gia đình từ (ngăn cách bằng |)</label>
+              <input class="form-input" id="newFamily" placeholder="vd: abundantly | abundance">
+            </div>
+            <div class="form-group">
+              <label>Nhóm</label>
+              <select class="form-input" id="newGroup">
+                ${allGroups.map(g=>`<option value="${g}">${g}</option>`).join('')}
+                <option value="Từ tự thêm">Từ tự thêm</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-pink" onclick="addManualWord()">➕ Thêm từ này</button>
+        </div>`:''}
+
+      ${state.addSubTab==='upload'?`
+        <div style="background:white;border-radius:var(--radius);border:1.5px solid var(--border);padding:1.2rem">
+          <h3 style="margin-bottom:.5rem;font-size:1rem">Upload file Excel (.xlsx)</h3>
+          <p style="font-size:.83rem;color:var(--text2);margin-bottom:1rem">File cần có các cột: <strong>Từ vựng (Tiếng Anh)</strong>, <strong>Nghĩa (Tiếng Việt)</strong>, <strong>Gia đình từ</strong> (không bắt buộc), <strong>Nhóm</strong> (không bắt buộc)</p>
+          <div class="upload-zone" onclick="document.getElementById('xlsxFile').click()">
+            <div class="uz-icon">📂</div>
+            <div class="uz-text">Nhấn để chọn file Excel</div>
+            <div class="uz-sub">.xlsx, .xls — tối đa 5MB</div>
+          </div>
+          <input type="file" id="xlsxFile" accept=".xlsx,.xls" style="display:none" onchange="handleExcelUpload(event)">
+          <div id="previewArea"></div>
+        </div>`:''}
+
+      ${state.addSubTab==='list'?`
+        <div>
+          ${customVocab.length===0?`
+            <div class="empty"><div class="eicon">📭</div><p>Chưa có từ nào được thêm.<br>Thêm từ bằng tab bên trên nhé!</p></div>`:`
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;flex-wrap:wrap;gap:8px">
+              <span style="font-size:.88rem;color:var(--text2);font-weight:600">${customVocab.length} từ đã thêm</span>
+              <button class="btn btn-red btn-sm" onclick="if(confirm('Xóa hết từ tự thêm?')){customVocab=[];save();updateStats();toast('🗑️ Đã xóa hết');renderAddVocab();}">🗑️ Xóa tất cả</button>
+            </div>
+            <div class="custom-list">
+              ${customVocab.map((v,i)=>`
+                <div class="custom-item">
+                  <div class="ci-word">
+                    ${v.w}
+                    <button style="background:none;border:none;cursor:pointer;font-size:.9rem" onclick="speak('${v.w.replace(/'/g,"\\'")}',event)">🔊</button>
+                  </div>
+                  <div class="ci-vi">${v.v}</div>
+                  <span class="group-badge">${v.g}</span>
+                  <button class="del-btn" onclick="deleteCustomWord(${i})">🗑️</button>
+                </div>`).join('')}
+            </div>`}
+        </div>`:''}
+    </div>`;
+}
+function addManualWord(){
+  const w=document.getElementById('newWord').value.trim();
+  const v=document.getElementById('newViet').value.trim();
+  const f=document.getElementById('newFamily').value.trim();
+  const g=document.getElementById('newGroup').value;
+  if(!w||!v){toast('⚠️ Điền đủ từ và nghĩa nhé!');return;}
+  customVocab.push({w,v,f,g});save();updateStats();
+  document.getElementById('newWord').value='';document.getElementById('newViet').value='';document.getElementById('newFamily').value='';
+  toast('✅ Đã thêm: '+w,true);renderAddVocab();
+}
+function deleteCustomWord(i){customVocab.splice(i,1);save();updateStats();toast('🗑️ Đã xóa');renderAddVocab();}
+
+function handleExcelUpload(event){
+  const file=event.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const wb=XLSX.read(e.target.result,{type:'array'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+      if(rows.length<2){toast('File không có dữ liệu!');return;}
+      const header=rows[0].map(h=>(h||'').toString().trim().toLowerCase());
+      const colEn=header.findIndex(h=>h.includes('tiếng anh')||h.includes('english')||h.includes('từ vựng'));
+      const colVi=header.findIndex(h=>h.includes('tiếng việt')||h.includes('nghĩa')||h.includes('vietnam'));
+      const colFam=header.findIndex(h=>h.includes('gia đình')||h.includes('family'));
+      const colGr=header.findIndex(h=>h.includes('nhóm')||h.includes('group'));
+      if(colEn<0||colVi<0){toast('❌ Không tìm thấy cột "Từ vựng (Tiếng Anh)" hoặc "Nghĩa (Tiếng Việt)"!');return;}
+      const preview=rows.slice(1).filter(r=>r[colEn]&&r[colVi]).slice(0,50);
+      document.getElementById('previewArea').innerHTML=`
+        <div style="margin-top:1rem">
+          <h3 style="font-size:.95rem;margin-bottom:.5rem">👀 Preview (${preview.length} từ)</h3>
+          <table class="preview-table">
+            <thead><tr><th>Từ tiếng Anh</th><th>Nghĩa</th><th>Gia đình từ</th><th>Nhóm</th></tr></thead>
+            <tbody>${preview.slice(0,10).map(r=>`<tr><td><b>${r[colEn]}</b></td><td>${r[colVi]}</td><td style="font-size:.75rem">${colFam>=0?r[colFam]:''}</td><td>${colGr>=0?r[colGr]:'Từ upload'}</td></tr>`).join('')}</tbody>
+          </table>
+          ${preview.length>10?`<p style="font-size:.8rem;color:var(--text2);margin-top:.4rem">...và ${preview.length-10} từ nữa</p>`:''}
+          <button class="btn btn-pink" style="margin-top:1rem" onclick="importExcelData(${JSON.stringify(preview.map(r=>({w:(r[colEn]||'').toString().trim(),v:(r[colVi]||'').toString().trim(),f:colFam>=0?(r[colFam]||'').toString().trim():'',g:colGr>=0?(r[colGr]||'Từ upload').toString().trim():'Từ upload'})))})">📥 Import ${preview.length} từ này</button>
+        </div>`;
+    }catch(err){toast('❌ Lỗi đọc file: '+err.message);}
+  };
+  reader.readAsArrayBuffer(file);
+}
+function importExcelData(data){
+  let added=0;
+  data.forEach(item=>{if(item.w&&item.v){customVocab.push(item);added++;}});
+  save();updateStats();toast(`✅ Đã import ${added} từ!`,true);state.addSubTab='list';renderAddVocab();
+}
+
+// ============ SCOREBOARD ============
+function renderScore(){
+  const va=VOCAB_ALL();
+  const known=Object.values(state.known).filter(Boolean).length;
+  const unknown=va.length-known;
+  const pct=Math.round(known/va.length*100);
+  const allGroups=[...new Set(va.map(v=>v.g))];
+  const groupStats=allGroups.map(g=>{const all=va.filter(v=>v.g===g);const k=all.filter(v=>state.known[v.w]).length;return {g,total:all.length,known:k,pct:Math.round(k/all.length*100)};});
+  const totalCorrect=state.quizHistory.reduce((a,h)=>a+h.score,0);
+  const totalQ=state.quizHistory.reduce((a,h)=>a+h.total,0);
+  const avgPct=totalQ?Math.round(totalCorrect/totalQ*100):0;
+  const svgR=52,cx=65,cy=65,circ=2*Math.PI*svgR,dash=circ*(pct/100);
+  document.getElementById('tabContent').innerHTML=`
+    <div class="score-wrap">
+      <div class="score-summary">
+        <div class="score-card"><div class="num">${va.length}</div><div class="lbl">📚 Tổng từ</div></div>
+        <div class="score-card green"><div class="num">${known}</div><div class="lbl">✅ Đã thuộc</div></div>
+        <div class="score-card"><div class="num">${unknown}</div><div class="lbl">📖 Chưa thuộc</div></div>
+        <div class="score-card yellow"><div class="num">${avgPct}%</div><div class="lbl">⚡ Quiz TB</div></div>
+      </div>
+      <div class="progress-ring-wrap">
+        <svg width="130" height="130" viewBox="0 0 130 130">
+          <circle cx="${cx}" cy="${cy}" r="${svgR}" fill="none" stroke="#ffd6e7" stroke-width="12"/>
+          <circle cx="${cx}" cy="${cy}" r="${svgR}" fill="none" stroke="#ff8fab" stroke-width="12"
+            stroke-dasharray="${dash} ${circ}" stroke-dashoffset="${circ/4}"
+            stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})"/>
+          <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle" font-size="22" font-weight="700" fill="#e8547a" font-family="Quicksand,sans-serif">${pct}%</text>
+        </svg>
+        <div class="progress-label">Tiến độ học tập</div>
+      </div>
+      <h3 style="margin-bottom:.8rem">📊 Theo từng nhóm</h3>
+      <div class="score-groups">
+        ${groupStats.map(gs=>`
+          <div class="score-group-card">
+            <div class="sg-name">${gs.g}</div>
+            <div class="sg-bar-wrap"><div class="sg-bar" style="width:${gs.pct}%"></div></div>
+            <div class="sg-info">${gs.known}/${gs.total} từ · ${gs.pct}%</div>
+          </div>`).join('')}
+      </div>
+      ${state.quizHistory.length?`
+        <h3 style="margin:1.5rem 0 .8rem">📋 Lịch sử quiz</h3>
+        <div class="history-list">
+          ${state.quizHistory.slice().reverse().map(h=>`
+            <div class="history-item">
+              <div>🎯 ${h.score}/${h.total}</div>
+              <div style="font-weight:700;color:${h.score/h.total>=.7?'var(--green)':'var(--orange)'}">${Math.round(h.score/h.total*100)}%</div>
+              <div class="ts">${h.time}</div>
+            </div>`).join('')}
+        </div>`:`<div class="empty"><div class="eicon">🎮</div><p>Chưa có lịch sử quiz.</p></div>`}
+      <div style="text-align:center;margin-top:1.5rem">
+        <button class="btn btn-outline btn-sm" onclick="if(confirm('Reset tất cả dữ liệu?')){state.known={};state.quizHistory=[];customVocab=[];save();updateStats();renderScore();}">🗑️ Reset tất cả</button>
+      </div>
+    </div>`;
+}
+
+function switchTab(tab){
+  state.tab=tab;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+  state.quizAnswered=false;
+  if(tab==='vocab')renderVocab();
+  else if(tab==='flashcard')renderFlashcard();
+  else if(tab==='quiz')renderQuiz();
+  else if(tab==='game')renderGame();
+  else if(tab==='addvocab')renderAddVocab();
+  else renderScore();
+}
+
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
+updateStats();
+renderVocab();
+</script>
+</body>
+</html>
